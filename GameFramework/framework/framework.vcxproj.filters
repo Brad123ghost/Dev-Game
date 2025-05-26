@@ -1,0 +1,638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{7222075d-3a7f-4bbb-8a3f-5c86ed4a940e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Box2d">
+      <UniqueIdentifier>{5fc18af0-417f-462a-8a15-229023e8f4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{1f5bfbb5-fb9a-402c-a5b7-2305cf8b3599}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Header Files">
+      <UniqueIdentifier>{a4c14de1-aff5-4fcd-a0a6-c21f6c7b468f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Source Files">
+      <UniqueIdentifier>{d659bb3f-bc0e-4dec-a3e0-e6139cebcd7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Discord">
+      <UniqueIdentifier>{99326dc1-3815-46d8-9d93-5a10d4e10e91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Discord\Header Files">
+      <UniqueIdentifier>{bc5c68fd-7dbc-45af-80a0-ce69c645d196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Discord\Source Files">
+      <UniqueIdentifier>{655cdae1-2087-4a30-956f-b2c5d19eecef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneballgame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenebouncingballs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenecheckerboards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneanimatedsprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lasercanon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenespaceinvaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="laserbullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alieninvader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particleemitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneparticle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneintro.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneintro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particle2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particleemitter2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneddll.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneddll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_impl_opengl3.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_impl_sdl2.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="scenebox2dtest.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenebox2dtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logmanager.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix4.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logmanager.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inputsystem.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="iniparser.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="animatedsprite.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="soundsystem.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texturemanager.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vector2.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vertexarray.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xboxcontroller.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenemainmenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenemanager.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="statemanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenepausescreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamictext.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera2D.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scenetestlevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\achievement_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\activity_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\application_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\core.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\image_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\lobby_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\network_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\overlay_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\relationship_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\storage_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\store_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\types.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\user_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="discord-files\voice_manager.cpp">
+      <Filter>Discord\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debughelper.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="newentity.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entitymanager.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="csprite.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneballgame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenebouncingballs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenecheckerboards.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneanimatedsprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenespaceinvaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lasercanon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="laserbullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alieninvader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particleemitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneparticle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particle2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particleemitter2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_impl_opengl3.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_impl_sdl2.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_api.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_block_allocator.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_body.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_broad_phase.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_chain_shape.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_circle_shape.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_collision.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_common.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_contact.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_contact_manager.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_distance.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_distance_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_draw.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_dynamic_tree.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_edge_shape.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_fixture.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_friction_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_gear_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_growable_stack.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_math.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_motor_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_mouse_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_polygon_shape.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_prismatic_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_pulley_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_revolute_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_rope.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_settings.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_shape.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_stack_allocator.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_time_of_impact.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_time_step.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_timer.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_types.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_weld_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_wheel_joint.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_world.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\b2_world_callbacks.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\base.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\box2d.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\collision.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\id.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\math_functions.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\box2d\include\types.h">
+      <Filter>Box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="crate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animatedsprite.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iniparser.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inlinehelper.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inputsystem.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix4.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="soundsystem.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texturemanager.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vector2.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vertexarray.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xboxcontroller.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenemainmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenemanager.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="statemanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gamestate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenepausescreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamictext.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera2D.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scenetestlevel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\achievement_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\activity_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\application_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\core.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\discord.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\event.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\ffi.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\image_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\lobby_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\network_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\overlay_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\relationship_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\storage_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\store_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\types.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\user_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discord-files\voice_manager.h">
+      <Filter>Discord\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="newentity.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entitymanager.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctransform.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cinput.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csprite.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="basecomponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="componentstorage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Game\shaders\sprite.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\sprite.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\line.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\line.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="debughelper.h">
+      <Filter>Framework\Header Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

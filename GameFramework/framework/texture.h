@@ -2,7 +2,7 @@
 #ifndef __TEXTURE_H_
 #define __TEXTURE_H_
 
-class SDL_Surface;
+struct SDL_Surface;
 
 class Texture
 {

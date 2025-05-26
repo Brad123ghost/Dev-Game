@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,11 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\lib\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\lib\imgui\backends\imgui_impl_sdl2.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\..\lib\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\..\lib\imgui\imgui_impl_sdl2.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="alieninvader.cpp" />
@@ -267,11 +267,11 @@
     <ClInclude Include="..\..\lib\box2d\include\id.h" />
     <ClInclude Include="..\..\lib\box2d\include\math_functions.h" />
     <ClInclude Include="..\..\lib\box2d\include\types.h" />
+    <ClInclude Include="..\..\lib\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\lib\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\..\lib\imgui\backends\imgui_impl_sdl2.h" />
     <ClInclude Include="..\..\lib\imgui\imconfig.h" />
     <ClInclude Include="..\..\lib\imgui\imgui.h" />
-    <ClInclude Include="..\..\lib\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="..\..\lib\imgui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="..\..\lib\imgui\imgui_impl_sdl2.h" />
     <ClInclude Include="..\..\lib\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\..\lib\imgui\imstb_textedit.h" />

@@ -1,5 +1,5 @@
 #include "scenemanager.h"
-
+#include "scene.h"
 SceneManager::SceneManager()
 	: m_iCurrentSceneIndex(0)
 {

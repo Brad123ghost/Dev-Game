@@ -427,21 +427,35 @@ void Game::ProcessFrameCounting(float deltaTime)
 
 void Game::DebugDraw()
 {
+	
+	// Main dockspace
+	/*ImGui::Begin("Main Dockspace", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBackground);
+	ImGuiID dockspaceID = ImGui::GetID("MainDockspace");
+	ImGui::DockSpace(dockspaceID, ImVec2(0, 0), ImGuiDockNodeFlags_None);
+	ImGui::End();*/
+
+
 	if (m_bShowMode)
 	{
+		/*ImGui::SetNextWindowDockID(ImGui::GetMainViewport()->ID, ImGuiCond_Always);*/
+		//ImGui::SetNextWindowPos(vp->WorkPos, ImGuiCond_Always);
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("Release Version", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
 		ImGui::Text("%s Build", m_sMode.c_str());
 		float height = ImGui::GetWindowSize().y;
-		ImGui::SetWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - height), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(vp->WorkPos.x, vp->WorkPos.y + (vp->Size.y - height)), ImGuiCond_Always);
 		ImGui::End();
 	}
 	// FPS Counter using ImGui 
 	if (m_bShowFPS)
 	{
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("FPS Counter", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav); // No title bar, no resize, no move, always auto-resize, no saved settings, no focus on appearing, no nav
 		ImGui::Text("%.2f ms  FPS: %d", m_fLastFrameTime, m_iFPS);
 		float width = ImGui::GetWindowSize().x;
-		ImGui::SetWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - width, 0), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(vp->WorkPos.x + ImGui::GetIO().DisplaySize.x - width, vp->WorkPos.y), ImGuiCond_Always);
 		ImGui::End();
 	}
 	if (m_ShowDebugWindow)
@@ -466,7 +480,10 @@ void Game::DebugDraw()
 		}
 
 		// Debug mode watermark
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+		//ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(vp->WorkPos, ImGuiCond_Always);
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("Watermark", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav); // No title bar, no resize, no move, always auto-resize, no saved settings, no focus on appearing, no nav
 		ImGui::Text("Debug Activated");
 		ImGui::End();
@@ -584,7 +601,8 @@ void Game::DebugDraw()
 void Game::ToggleDebugWindow()
 {
 	m_ShowDebugWindow = !m_ShowDebugWindow;
-	std::cout << "Debug Pressed" << std::endl;
+	//std::cout << "Debug Pressed" << std::endl;
+	std::cout << m_ShowDebugWindow << std::endl;
 	//m_pInputSystem->ShowMouseCursor(m_ShowDebugWindow);
 }
 

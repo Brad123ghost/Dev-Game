@@ -18,7 +18,7 @@ DynamicText::~DynamicText()
 	if (m_pFont)
 	{
 		TTF_CloseFont(m_pFont);
-		delete m_pFont;
+		//delete m_pFont;
 		m_pFont = 0;
 	}
 

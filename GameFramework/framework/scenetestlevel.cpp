@@ -32,8 +32,8 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 
 	renderer.SetClearColor(0, 0, 0);
 	m_pTestSprite = renderer.CreateSprite("sprites\\crate.png");
-	m_pTestSprite->SetX(100.0f);
-	m_pTestSprite->SetY(100.0f);
+	m_pTestSprite->SetX(100);
+	m_pTestSprite->SetY(100);
 	
 	// Add player
 	std::shared_ptr<NewEntity> player = m_pEntityManager.CreateEntity(eTag::PLAYER);

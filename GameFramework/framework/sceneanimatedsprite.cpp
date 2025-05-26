@@ -7,7 +7,7 @@
 #include "renderer.h"
 #include "imgui.h"
 #include "animatedsprite.h"
-#include "texture.h";
+#include "texture.h"
 
 // Library includes:
 #include <cassert>

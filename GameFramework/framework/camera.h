@@ -35,7 +35,7 @@ public:
     Matrix4 GetViewMatrix() const;
     Vector2 WorldToScreen(Vector2 worldPos) const;
     Vector2 ScreenToWorld(Vector2 screenPos) const;
-    Vector2 GetViewportSize() const { return Vector2(m_fwidth, m_fheight); }
+    Vector2 GetViewportSize() const { return Vector2(static_cast<float>(m_fwidth), static_cast<float>(m_fheight)); }
     void SetCameraType(CameraType type);
     CameraType GetCameraType() const { return m_eCameraType; }
     std::string GetCameraTypeName() const;

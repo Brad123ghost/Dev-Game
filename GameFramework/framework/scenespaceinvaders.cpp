@@ -497,7 +497,7 @@ void SceneSpaceInvaders::DebugDraw()
 				activeCam->ResetCamera();
 			}
 			
-			struct dump
+			/*struct dump
 			{
 				int x;
 				int y;
@@ -512,7 +512,7 @@ void SceneSpaceInvaders::DebugDraw()
 			if (ImGui::SliderInt("Camera Y", &tempDump.y, -m_iMaxHeight, m_iMaxHeight))
 			{
 				activeCam->SetPosition(0, tempDump.y);
-			}
+			}*/
 		}
 	}
 	if (ImGui::CollapsingHeader("Player Settings"))

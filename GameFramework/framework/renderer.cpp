@@ -122,13 +122,21 @@ bool Renderer::Initialize(bool windowed, int width, int height)
 		assert(m_pTextureManager);
 		initialized = m_pTextureManager->Initialize();
 	}
-
 	ImGuiContext* tempgui = ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(m_pWindow, m_glContext);
 	ImGui_ImplOpenGL3_Init();
 	ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
 	m_pDefaultCamera = new Camera(width, height);
 	m_pDefaultCamera->SetCamSpeed(300.f);
 
@@ -185,6 +193,14 @@ void Renderer::Present()
 {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(m_pWindow, m_glContext);
+	}
 
 	SDL_GL_SwapWindow(m_pWindow);
 }
@@ -507,7 +523,7 @@ void Renderer::GenerateGrid(int gSize, int cSize)
 {
 	const int MAX_SIZE = gSize * cSize;
 	//const int GRID_SIZE = gSize;
-	const float CELL_SPACING = cSize;
+	const int CELL_SPACING = cSize;
 
 	for (int y = 0; y <= MAX_SIZE; y += CELL_SPACING)
 	{

@@ -59,4 +59,113 @@ void EntityManager::RemoveDeadEntities(EntityVec& vec)
 void EntityManager::DrawDebug()
 {
 	ImGui::Text("Entity Manager Debug");
+
+	ImGuiTableFlags flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp;
+	//ImGuiTableRowFlags rowFlags = ImGuiTableRowFlags_Headers;
+	ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_NoReorder;
+	ImGuiSelectableFlags selectableFlags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowDoubleClick | ImGuiSelectableFlags_AllowItemOverlap;
+
+	ImGui::BeginTable("EntityTable", 3, flags);
+	ImGui::TableSetupColumn("ID", columnFlags );
+	ImGui::TableSetupColumn("Name", columnFlags );
+	ImGui::TableSetupColumn("Tag", columnFlags );
+	ImGui::TableHeadersRow();
+	static size_t selectedEntityId = static_cast<size_t>(-1);
+	for (auto& e : m_entities)
+	{
+		ImGui::PushID(e->GetId());
+		
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		bool isSelected = (selectedEntityId == e->GetId());
+		if (ImGui::Selectable("##row", isSelected, selectableFlags))
+		{
+			selectedEntityId = e->GetId();
+			std::cout << selectedEntityId << " selected" << std::endl;
+		}
+		ImGui::SameLine();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("%zu", e->GetId());
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("Name");
+		ImGui::TableSetColumnIndex(2);
+		ImGui::Text("%s", e->GetTagString().c_str());
+
+		ImGui::PopID();
+	}
+	ImGui::EndTable();
+
+	ImGui::BeginChild("EntityDetails", ImVec2(0, 450), true);
+	if (selectedEntityId == static_cast<size_t>(-1) || selectedEntityId > m_entities.size())
+	{
+		ImGui::Text("Select an entity to view its properties.");
+		ImGui::EndChild();
+		return;
+	}
+
+	ImGui::Text("This is the child window");
+	ImGui::Text("Name");
+	ImGui::Text("ID: %zu", selectedEntityId);
+	ImGui::Text("Tag: %s", m_entities[selectedEntityId]->GetTagString().c_str());
+	ImGui::SeparatorText("Properties");
+
+	ImGuiTreeNodeFlags propertyFlags = ImGuiTreeNodeFlags_DefaultOpen;
+	ImGuiInputTextFlags transformFlags = ImGuiInputTextFlags_CharsDecimal;
+	if (m_entities[selectedEntityId]->GetComponent<CTransform>())
+	{
+		if (ImGui::CollapsingHeader("Transform", propertyFlags))
+		{
+			ImGui::BeginTable("Transform", 5);
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text("Position");
+			ImGui::TableNextColumn();
+			ImGui::Text("X");
+			ImGui::SameLine();
+			int x = static_cast<int>(m_entities[selectedEntityId]->GetComponent<CTransform>()->position.x);
+			if (ImGui::DragInt("##xpos", &x, 1.f, 0, 0, "%d"))
+				m_entities[selectedEntityId]->GetComponent<CTransform>()->position.x = static_cast<float>(x);
+			ImGui::TableNextColumn();
+			ImGui::Text("Y");
+			ImGui::SameLine();
+			int y = static_cast<int>(m_entities[selectedEntityId]->GetComponent<CTransform>()->position.y);
+			if(ImGui::DragInt("##ypos", &y, 1.f, 0, 0, "%d"))
+				m_entities[selectedEntityId]->GetComponent<CTransform>()->position.y = static_cast<float>(y);
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text("Scale");
+			ImGui::TableNextColumn();
+			ImGui::Text("X");
+			ImGui::SameLine();
+			static char xscale[32] = "1.0";
+			ImGui::InputText("##xscale", xscale, 32, transformFlags);
+			ImGui::TableNextColumn();
+			ImGui::Text("Y");
+			ImGui::SameLine();
+			static char yscale[32] = "1.0";
+			ImGui::InputText("##yscale", yscale, 32, transformFlags);
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text("Rotation");
+			ImGui::TableNextColumn();
+			ImGui::Text("X");
+			ImGui::SameLine();
+			float rot = m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation;
+			if(ImGui::DragFloat("##rotation", &rot, 0.1f, 0.0f, 360.0f, "%.2f", ImGuiSliderFlags_WrapAround))
+				m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation = rot;
+			ImGui::EndTable();
+		}
+	}
+	if (m_entities[selectedEntityId]->GetComponent<CSprite>())
+	{
+		auto sprite = m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite();
+		if (ImGui::CollapsingHeader("Sprite", propertyFlags))
+		{
+			ImGui::Text("Sprite Component Properties:");
+			ImGui::Text("X: %d", sprite->GetX());
+			ImGui::Text("Y: %d", sprite->GetY());
+		}
+	}
+
+	ImGui::EndChild();
 }

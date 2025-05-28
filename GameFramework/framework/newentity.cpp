@@ -28,6 +28,19 @@ eTag NewEntity::GetTag() const
 	return m_eTag;
 }
 
+std::string NewEntity::GetTagString() const
+{
+	switch (m_eTag)
+	{
+	case eTag::DEFAULT: return "Default";
+	case eTag::PLAYER: return "Player";
+	case eTag::ETAG_ENEMY: return "Enemy";
+	case eTag::ETAG_PROJECTILE: return "Projectile";
+	case eTag::ETAG_ITEM: return "Item";
+	default: return "Unknown";
+	}
+}
+
 size_t NewEntity::GetId() const
 {
 	return m_iId;

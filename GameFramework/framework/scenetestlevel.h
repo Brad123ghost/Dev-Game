@@ -10,6 +10,7 @@ class InputSystem;
 class SoundSystem;
 class Sprite;
 class Camera;
+class Texture;
 
 class SceneTestLevel : public Scene
 {
@@ -23,6 +24,8 @@ public:
 
 	virtual void SceneInfoDraw();
 	virtual void DebugDraw();
+	virtual void EntityManagerDebugDraw(bool& open);
+
 private:
 	SceneTestLevel(const SceneTestLevel& sceneTestLevel);
 	SceneTestLevel& operator=(const SceneTestLevel& sceneTestLevel);
@@ -37,8 +40,7 @@ private:
 	bool m_bDrawAABB;
 	int gridSize;
 	int cellSize;
-
-	EntityManager m_pEntityManager;
+	EntityManager m_entityManager;
 };
 
 #endif // __SCENETESTLEVEL_H_

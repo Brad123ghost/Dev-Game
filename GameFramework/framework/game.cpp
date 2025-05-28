@@ -51,6 +51,7 @@ Game::Game()
 	, m_bShowSplash(true)
 	, m_bShowDebugHelp(false)
 	, m_bShowAssetBrowser(false)
+	, m_bShowEntityManager(true)
 	, m_bShowFPS(false)
 	, m_bShowMode(false)
 	//, x(500)
@@ -460,6 +461,12 @@ void Game::DebugDraw()
 	}
 	if (m_ShowDebugWindow)
 	{
+		if (m_bShowEntityManager && StateManager::GetInstance().GetState() == GameState::STATE_TEST_LEVEL)
+		{
+			SceneTestLevel* testLevel = static_cast<SceneTestLevel*>(m_scenes[m_iCurrentScene]);
+			testLevel->EntityManagerDebugDraw(m_bShowEntityManager);
+		}
+
 		if (m_bShowAssetBrowser)
 		{
 			ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
@@ -496,6 +503,10 @@ void Game::DebugDraw()
 				ImGui::MenuItem("Asset Browser", NULL, &m_bShowAssetBrowser);
 				/*ImGui::SeparatorText("Frames");
 				ImGui::MenuItem("Show FPS", NULL, &showFPS);*/
+
+				ImGui::MenuItem("Scene Entity Manager", NULL, &m_bShowEntityManager);
+				
+				
 				ImGui::EndMenu();
 			}
 			ImGui::MenuItem("Help", NULL, &m_bShowDebugHelp);

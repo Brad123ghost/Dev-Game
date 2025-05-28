@@ -3,6 +3,7 @@
 #define __NEWENTITY_H_
 
 #include <memory>
+#include <string>
 
 #include "vector2.h"
 #include "ctransform.h"
@@ -32,6 +33,7 @@ public:
 	void SetDead();
 	bool IsAlive() const;
 	eTag GetTag() const;
+	std::string GetTagString() const;
 	size_t GetId() const;
 
 

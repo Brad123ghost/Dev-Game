@@ -144,8 +144,9 @@ void Ball::DebugDraw()
 	ImGui::Text("Lowerbound (%f, %f)", m_boundaryLow.x, m_boundaryLow.y);
 	ImGui::Text("Upperbound (%f, %f)", m_boundaryHigh.x, m_boundaryHigh.y);
 
-	float spriteScale = m_pSprite->GetScale();
-	ImGui::InputFloat("Scale", &spriteScale, 0.05f);
+	Vector2 spriteScale = m_pSprite->GetScale();
+	ImGui::InputFloat("Scale X", &spriteScale.x, 0.05f);
+	ImGui::InputFloat("Scale Y", &spriteScale.y, 0.05f);
 	m_pSprite->SetScale(spriteScale);
 	ComputeBounds(static_cast<int>(sm_fBoundaryWidth), static_cast<int>(sm_fBoundaryHeight));
 
@@ -202,19 +203,19 @@ void Ball::SetBad()
 
 void Ball::Shrink()
 {
-	float currentScale = m_pSprite->GetScale();
-	if (currentScale > 0.05)
+	Vector2 currentScale = m_pSprite->GetScale();
+	if (currentScale.x > 0.05)
 	{
-		m_pSprite->SetScale(currentScale - 0.01);
+		m_pSprite->SetScale(currentScale.x - 0.01);
 	}
 }
 
 void Ball::Enlarge()
 {
-	float currentScale = m_pSprite->GetScale();
-	if (currentScale < 2)
+	Vector2 currentScale = m_pSprite->GetScale();
+	if (currentScale.x < 2)
 	{
-		m_pSprite->SetScale(currentScale + 0.01);
+		m_pSprite->SetScale(currentScale.x + 0.01);
 	}
 }
 

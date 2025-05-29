@@ -137,13 +137,15 @@ void EntityManager::DrawDebug()
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			static char xscale[32] = "1.0";
-			ImGui::InputText("##xscale", xscale, 32, transformFlags);
+			float xscale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.x;
+			if (ImGui::DragFloat("##xscale", &xscale, 0.1f, 0.0f, 10.0f, "%.2f"))
+				m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.x = xscale;
 			ImGui::TableNextColumn();
 			ImGui::Text("Y");
 			ImGui::SameLine();
-			static char yscale[32] = "1.0";
-			ImGui::InputText("##yscale", yscale, 32, transformFlags);
+			float yscale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.y;
+			if (ImGui::DragFloat("##yscale", &yscale, 0.1f, 0.0f, 10.0f, "%.2f"))
+				m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.y = yscale;
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::Text("Rotation");

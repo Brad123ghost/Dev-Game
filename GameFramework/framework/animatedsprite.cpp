@@ -40,12 +40,12 @@ bool AnimatedSprite::Initialize(Texture& texture)
 
 int AnimatedSprite::GetWidth() const
 {
-	return static_cast<int>(ceilf(m_iFrameWidth * m_scale));
+	return static_cast<int>(ceilf(m_iFrameWidth * m_xScale));
 }
 
 int AnimatedSprite::GetHeight() const
 {
-	return static_cast<int>(ceilf(m_iFrameHeight * m_scale));
+	return static_cast<int>(ceilf(m_iFrameHeight * m_yScale));
 }
 
 bool AnimatedSprite::IsAnimating() const

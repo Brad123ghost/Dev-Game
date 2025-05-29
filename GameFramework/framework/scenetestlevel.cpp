@@ -69,6 +69,8 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 			e->GetComponent<CSprite>()->GetSprite()->SetX(transform->position.x);
 			e->GetComponent<CSprite>()->GetSprite()->SetY(transform->position.y);
 			e->GetComponent<CSprite>()->GetSprite()->SetAngle(transform->rotation);
+			e->GetComponent<CSprite>()->GetSprite()->SetXScale(transform->scale.x);
+			e->GetComponent<CSprite>()->GetSprite()->SetYScale(transform->scale.y);
 		}
 	}
 	// Process the entities

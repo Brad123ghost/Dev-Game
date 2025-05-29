@@ -34,8 +34,11 @@ public:
 	void SetAngle(float angle);
 	float GetAngle() const;
 
+	void SetScale(Vector2 scale) const; 
 	void SetScale(float scale);
-	float GetScale() const;
+	void SetXScale(float scale);
+	void SetYScale(float scale);
+	Vector2 GetScale() const;
 
 	void SetAlpha(float alpha);
 	float GetAlpha() const;
@@ -73,7 +76,8 @@ protected:
 	int m_width;
 	int m_height;
 
-	float m_scale;
+	float m_xScale;
+	float m_yScale;
 	float m_alpha;
 
 	float m_tintRed;

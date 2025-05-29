@@ -10,10 +10,10 @@ class CTransform : public BaseComponent
 public:
 	Vector2 position;
 	Vector2 velocity;
-	float scale;
+	Vector2 scale;
 	float rotation;
 
-	CTransform(const Vector2& pos = { 0,0 }, const Vector2& vel = {0,0}, float scale = 1.f, float rot = 0.f)
+	CTransform(Vector2 pos = { 0,0 }, Vector2 vel = { 0,0 }, Vector2 scale = {1.f, 1.f}, float rot = 0.f)
 		: position(pos)
 		, velocity(vel)
 		, scale(scale)

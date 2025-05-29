@@ -16,7 +16,8 @@ Sprite::Sprite()
 	, m_angle(0.0f)
 	, m_centerX(0)
 	, m_centerY(0)
-	, m_scale(1.0f)
+	, m_xScale(1.0f)
+	, m_yScale(1.0f)
 	, m_alpha(1.0f)
 	, m_tintRed(1.0f)
 	, m_tintGreen(1.0f)
@@ -101,14 +102,30 @@ float Sprite::GetAngle() const
 	return m_angle;
 }
 
-void Sprite::SetScale(float scale)
+void Sprite::SetScale(Vector2 scale) const
 {
-	m_scale = scale;
+	scale.x = m_xScale;
+	scale.y = m_yScale;
 }
 
-float Sprite::GetScale() const
+void Sprite::SetScale(float scale)
 {
-	return m_scale;
+	m_xScale = scale;
+	m_yScale = scale;
+}
+
+void Sprite::SetXScale(float scale)
+{
+	m_xScale = scale;
+}
+void Sprite::SetYScale(float scale)
+{
+	m_yScale = scale;
+}
+
+Vector2 Sprite::GetScale() const
+{
+	return {m_xScale, m_yScale};
 }
 
 void Sprite::SetAlpha(float alpha)
@@ -123,12 +140,12 @@ float Sprite::GetAlpha() const
 
 int Sprite::GetWidth() const
 {
-	return static_cast<int>(ceilf(m_width * m_scale));
+	return static_cast<int>(ceilf(m_width * m_xScale));
 }
 
 int Sprite::GetHeight() const
 {
-	return static_cast<int>(ceilf(m_height * m_scale));
+	return static_cast<int>(ceilf(m_height * m_yScale));
 }
 
 float Sprite::Clamp(float minimum, float value, float maximum)

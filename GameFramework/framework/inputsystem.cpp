@@ -23,7 +23,9 @@ InputSystem::InputSystem()
 	, m_currentMouseButtons(0)
 	, m_pXboxController(0)
 	, m_iNumAttachedControllers(0)
+	, m_iNumJoySticks(0)
 	, m_bRelativeMouseMode(false)
+	, m_previousKeyboardState{ 0 }
 {
 
 }
@@ -54,9 +56,17 @@ bool InputSystem::Initialize()
 
 	ShowMouseCursor(false);
 
-	m_iNumAttachedControllers = SDL_NumJoysticks();
+	m_iNumJoySticks = SDL_NumJoysticks();
 
-	for (int k = 0; k < m_iNumAttachedControllers; ++k)
+	for (int k = 0; k < m_iNumJoySticks; ++k)
+	{
+		if (SDL_IsGameController(k))
+		{
+			++m_iNumAttachedControllers;
+		}
+	}
+
+	for (int k = 0; k < m_iNumAttachedControllers; k++)
 	{
 		if (SDL_IsGameController(k))
 		{

@@ -17,8 +17,10 @@ public:
 
 	int GetWidth() const;
 	int GetHeight() const;
-
+	unsigned int GetTextureId() const { return m_uiTextureId; }
+	const char* GetPath() const { return m_pcName; }
 	void LoadTextTexture(const char* text, const char* fontname, int pointsize);
+	void LoadFontAtlas(const char* text, SDL_Surface* pSurface);
 	void LoadSurfaceIntoTexture(SDL_Surface* pSurface);
 
 	void DebugDraw();

@@ -179,6 +179,7 @@
     <ClCompile Include="dynamictext.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="entitymanager.cpp" />
+    <ClCompile Include="fontatlas.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="iniparser.cpp" />
     <ClCompile Include="inputsystem.cpp" />
@@ -307,6 +308,7 @@
     <ClInclude Include="dynamictext.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="entitymanager.h" />
+    <ClInclude Include="fontatlas.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="newentity.h" />

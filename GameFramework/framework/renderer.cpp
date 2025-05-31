@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <SDL_ttf.h>
 //#include <vector>
 
 Renderer::Renderer()
@@ -65,6 +66,9 @@ Renderer::~Renderer()
 
 	delete m_pDefaultCamera;
 	m_pDefaultCamera = 0;
+
+	delete m_pFontAtlas;
+	m_pFontAtlas = 0;
 
 	m_fLineData.clear();
 
@@ -139,6 +143,10 @@ bool Renderer::Initialize(bool windowed, int width, int height)
 	}
 	m_pDefaultCamera = new Camera(width, height);
 	m_pDefaultCamera->SetCamSpeed(300.f);
+
+	TTF_Init();
+	const char* glyphs = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	m_pFontAtlas = new FontAtlas("arial.ttf", 24, glyphs, m_pTextureManager);
 
 	return initialized;
 }
@@ -404,6 +412,56 @@ void Renderer::CreateStaticText(const char* pText, int pointsize)
 	Texture* pTexture = new Texture();
 	pTexture->LoadTextTexture(pText, "arial.ttf", pointsize);
 	m_pTextureManager->AddTexture(pText, pTexture);
+}
+void Renderer::DrawText(const char* pText, float x, float y, float scale, const glm::vec4& color)
+{
+	m_pSpriteShader->SetActive();
+
+	Matrix4 world;
+	SetIdentity(world);
+
+	m_pSpriteShader->SetMatrixUniform("uWorldTransform", world);
+	Camera* activeCam = m_pDefaultCamera;
+	Matrix4 view = activeCam->GetViewMatrix();
+	Matrix4 orthoViewProj;
+	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
+	m_pSpriteShader->SetVector4Uniform("color", color.r, color.g, color.b, color.a);
+	Matrix4 newView = Multiply(view, orthoViewProj);
+	m_pSpriteShader->SetMatrixUniform("uViewProj", newView);
+
+	glBindTexture(GL_TEXTURE_2D, m_pFontAtlas->textureId);
+
+	float penX = x;
+	float penY = y;
+
+	for (const char* c = pText; *c; ++c)
+	{
+		auto it = m_pFontAtlas->glyphs.find(*c);
+		if (it == m_pFontAtlas->glyphs.end()) continue;
+		const Glyph& g = it->second;
+
+		float xpos = penX + g.xOffset * scale;
+		float ypos = penY + g.yOffset * scale;
+		float w = g.width * scale;
+		float h = g.height * scale;
+
+		float vertices[20] = {
+			// pos         // tex
+			xpos,     ypos,      0.0f, g.u0, g.v0,
+			xpos + w,   ypos,      0.0f, g.u1, g.v0,
+			xpos + w,   ypos + h,    0.0f, g.u1, g.v1,
+			xpos,     ypos + h,    0.0f, g.u0, g.v1
+		};
+		unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
+
+		VertexArray va(vertices, 4, indices, 6, 5);
+		va.SetActive();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		penX += g.xAdvance * scale;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //void Renderer::CreateDynamicText(const char* pText, int pointsize, int x, int y)

@@ -17,6 +17,7 @@ public:
 	~Sprite();
 
 	bool Initialize(Texture& texture);
+	void ReplaceTexture(Texture& texture);
 	void Process(float deltaTime);
 	void Draw(Renderer& renderer, Camera* camera = nullptr);
 
@@ -51,6 +52,8 @@ public:
 	float GetBlueTint() const;
 
 	Texture* GetTexture() const;
+	unsigned int GetTextureId() const;
+	const char* GetTexturePath() const;
 
 protected:
 	float Clamp(float minimum, float vlaue, float maximum);

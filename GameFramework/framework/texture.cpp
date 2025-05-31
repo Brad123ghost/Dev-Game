@@ -115,6 +115,15 @@ void Texture::LoadTextTexture(const char* text, const char* fontname, int points
 	pFont = 0;
 }
 
+void Texture::LoadFontAtlas(const char* text, SDL_Surface* pSurface)
+{
+	if (pSurface)
+	{
+		m_pcName = text;
+		LoadSurfaceIntoTexture(pSurface);
+	}
+}
+
 void Texture::LoadSurfaceIntoTexture(SDL_Surface* pSurface)
 {
 	if (pSurface)
@@ -202,7 +211,7 @@ void Texture::DebugDraw()
 	if (m_bIsOpen)
 	{
 		std::string name = "Texture Info##" + std::to_string(m_uiTextureId);
-		ImGui::Begin(name.c_str(), &m_bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::Begin(name.c_str(), &m_bIsOpen,  ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 		ImGui::Text("Texture Name: %s", m_pcName);
 		ImGui::Text("Texture ID: %d", m_uiTextureId);
 		ImGui::Text("Texture Size: %d by %d", m_iWidth, m_iHeight);

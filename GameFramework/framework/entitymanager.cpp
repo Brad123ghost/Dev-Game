@@ -1,6 +1,8 @@
 #include "entitymanager.h"
 #include "imgui.h"
-
+#include "game.h"
+#include "texturemanager.h"
+#include "renderer.h"
 EntityManager::EntityManager()
 	: m_totalEntities(0)
 {
@@ -102,12 +104,29 @@ void EntityManager::DrawDebug()
 		ImGui::EndChild();
 		return;
 	}
-
-	ImGui::Text("This is the child window");
+	auto loadedTextures = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextures();
+	if (ImGui::Button("Select Texture"))
+	{
+		Game::GetInstance().GetRenderer().GetTextureManager()->ToggleSelectTexture();
+	}
+	Game::GetInstance().GetRenderer().GetTextureManager()->SelectTextureDebugDraw();
+	std::map<std::string, Texture*>::iterator it = loadedTextures.begin();
+	while (it != loadedTextures.end())
+	{
+		ImGui::Text("%s", it->first.c_str());
+		++it;
+		//std::cout << it->first << std::endl;
+	}
+	Texture* temp = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture("sprites\\ball.png");
+	if (ImGui::Button("Change Texture"))
+	{
+		m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite()->ReplaceTexture(*temp);
+	}
 	ImGui::Text("Name");
 	ImGui::Text("ID: %zu", selectedEntityId);
 	ImGui::Text("Tag: %s", m_entities[selectedEntityId]->GetTagString().c_str());
 	ImGui::SeparatorText("Properties");
+
 
 	ImGuiTreeNodeFlags propertyFlags = ImGuiTreeNodeFlags_DefaultOpen;
 	ImGuiInputTextFlags transformFlags = ImGuiInputTextFlags_CharsDecimal;
@@ -163,9 +182,50 @@ void EntityManager::DrawDebug()
 		auto sprite = m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite();
 		if (ImGui::CollapsingHeader("Sprite", propertyFlags))
 		{
-			ImGui::Text("Sprite Component Properties:");
-			ImGui::Text("X: %d", sprite->GetX());
-			ImGui::Text("Y: %d", sprite->GetY());
+			ImGui::BeginTable("SpriteProperties", 6);		
+			ImGui::TableNextRow();
+			ImGui::NextColumn();
+			ImGui::Text("Texture ID: %d", sprite->GetTextureId());
+			ImGui::TableNextRow();
+			ImGui::NextColumn();
+			ImGui::Text("Texture Path: %s", sprite->GetTexturePath());
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			ImGui::Text("Tint");
+			ImGui::TableNextColumn();
+			float redTint = sprite->GetRedTint();
+			ImGui::Text("R");
+			ImGui::SameLine();
+			if(ImGui::SliderFloat("##redTint", &redTint, 0.0f, 1.0f, "%.2f"))
+				sprite->SetRedTint(redTint);
+			ImGui::TableNextColumn();
+			float greenTint = sprite->GetGreenTint();
+			ImGui::Text("G");
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("##greenTint", &greenTint, 0.0f, 1.0f, "%.2f"))
+				sprite->SetGreenTint(greenTint);
+			ImGui::TableNextColumn();
+			float blueTint = sprite->GetBlueTint();
+			ImGui::Text("B");
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("##blueTint", &blueTint, 0.0f, 1.0f, "%.2f"))
+				sprite->SetBlueTint(blueTint);
+			ImGui::TableNextColumn();
+			float alpha = sprite->GetAlpha();
+			ImGui::Text("A");
+			ImGui::SameLine();
+			if (ImGui::SliderFloat("##alpha", &alpha, 0.0f, 1.0f, "%.2f"))
+				sprite->SetAlpha(alpha);
+			ImGui::TableNextColumn();
+			if (ImGui::Button("Reset"))
+			{
+				sprite->SetRedTint(1.0f);
+				sprite->SetGreenTint(1.0f);
+				sprite->SetBlueTint(1.0f);
+				sprite->SetAlpha(1.0f);
+			}
+			ImGui::EndTable();
+			
 		}
 	}
 

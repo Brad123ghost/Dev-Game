@@ -13,6 +13,7 @@
 #include <SDL.h>
 #include <iostream>
 TextureManager::TextureManager()
+	: m_bShowSelect(false)
 {
 
 }
@@ -92,7 +93,34 @@ void TextureManager::DebugDraw()
 		++iter;
 		count++;
 	}
-	
-	
+}
 
+void TextureManager::SelectTextureDebugDraw()
+{
+	if (m_bShowSelect)
+	{
+		std::map<std::string, Texture*>::iterator iter = m_pLoadedTextures.begin();
+		ImGui::Begin("Select 3Texture", &m_bShowSelect);
+		ImGui::Text("Select texture window");
+		float windowWidth = ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvail().x;
+		size_t count = 0;
+		while (iter != m_pLoadedTextures.end())
+		{
+			Texture* pTexture = iter->second;
+			//pTexture->DebugDraw();
+			ImGuiStyle& style = ImGui::GetStyle();
+			float lastTexture = ImGui::GetItemRectMax().x;
+			float nextTexture = lastTexture + style.ItemSpacing.x + 50; // 50 is texture thumbnail width
+
+			if (count + 1 < m_pLoadedTextures.size() && nextTexture < windowWidth)
+				ImGui::SameLine();
+			++iter;
+			count++;
+		}
+		ImGui::End();
+	}
+}
+void TextureManager::ToggleSelectTexture()
+{
+	m_bShowSelect = !m_bShowSelect;
 }

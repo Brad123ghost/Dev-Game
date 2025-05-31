@@ -25,6 +25,8 @@ public:
 	void Quit();
 	void ToggleDebugWindow();
 	bool IsDebugVisible();
+	Renderer& GetRenderer() const { return *m_pRenderer; };
+
 protected:
 	void Process(float deltaTime);
 	void Draw(Renderer& renderer);

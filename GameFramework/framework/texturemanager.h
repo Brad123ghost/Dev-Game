@@ -20,8 +20,11 @@ public:
 
 	Texture* GetTexture(const char* pcFilename);
 	void AddTexture(const char* key, Texture* pTexture);
+	std::map<std::string, Texture*>& GetLoadedTextures() { return m_pLoadedTextures; }
 
 	void DebugDraw();
+	void SelectTextureDebugDraw();
+	void ToggleSelectTexture();
 protected:
 
 private:
@@ -35,7 +38,7 @@ protected:
 	std::map<std::string, Texture*> m_pLoadedTextures;
 
 private:
-
+	bool m_bShowSelect;
 };
 
 #endif // __TEXTUREMANAGER_H_

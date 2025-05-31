@@ -19,6 +19,7 @@ public:
 	virtual ~SceneTestLevel();
 
 	virtual bool Initialize(Renderer& renderer, SoundSystem& soundSystem);
+	void replaceTexture(std::shared_ptr<Sprite> sprite, const char* texturePath);
 	virtual void Process(float deltaTime, InputSystem& inputSystem);
 	virtual void Draw(Renderer& renderer);
 
@@ -34,7 +35,7 @@ private:
 protected:
 	Sprite* m_pTestSprite;
 	Camera* m_pCamera;
-
+	Renderer* m_pRenderer;
 private:
 	bool m_bShowGrid;
 	bool m_bDrawAABB;

@@ -19,6 +19,7 @@ struct SDL_Window;
 #include <memory>
 #include <vector>
 #include "glm.hpp"
+#include "fontatlas.h"
 
 class Renderer
 {
@@ -46,6 +47,7 @@ public:
 	void DrawAnimatedSprite(AnimatedSprite& sprite, int frame);
 	void DrawTest();
 	void CreateStaticText(const char* pText, int pointsize);
+	void DrawText(const char* pText, float x, float y, float scale, const glm::vec4& color = glm::vec4(1.f));
 	//void CreateDynamicText(const char* pText, int pointsize, int x, int y);
 
 	void DrawAABB(float x, float y, float width, float height);
@@ -59,6 +61,9 @@ public:
 	void DrawLineFlush(Camera* pCamera);
 	void GenerateGrid(int gSize, int cSize);
 
+	SDL_Window* GetWindow() const { return m_pWindow; }
+
+	TextureManager* GetTextureManager() const { return m_pTextureManager; }
 	//Camera* GetCamera() { return m_pCamera; }
 protected:
 	bool InitializeOpenGL(int screenWidth, int screenHeight);
@@ -76,6 +81,7 @@ private:
 public:
 
 protected:
+	FontAtlas* m_pFontAtlas;
 	TextureManager* m_pTextureManager;
 	SDL_Window* m_pWindow;
 	SDL_GLContext m_glContext;

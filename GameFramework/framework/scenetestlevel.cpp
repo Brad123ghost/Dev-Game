@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "debughelper.h"
 #include "texture.h"
+#include "logmanager.h"
 SceneTestLevel::SceneTestLevel()
 	: m_bShowGrid(false)
 	, m_bDrawAABB(false)
@@ -13,7 +14,7 @@ SceneTestLevel::SceneTestLevel()
 	, m_pCamera(0)
 	, gridSize(10)
 	, cellSize(32)
-
+	, m_pRenderer(0)
 {
 }
 
@@ -24,10 +25,12 @@ SceneTestLevel::~SceneTestLevel()
 
 	delete m_pCamera;
 	m_pCamera = 0;
+
 }
 
 bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 {
+	m_pRenderer = &renderer;
 	m_pCamera = new Camera(renderer.GetWidth(), renderer.GetHeight());
 
 	renderer.SetClearColor(0, 0, 0);
@@ -56,6 +59,22 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	return true;
 }
 
+void SceneTestLevel::replaceTexture(std::shared_ptr<Sprite> sprite, const char* texturePath)
+{
+	Texture* newTexture = m_pRenderer->CreateTexture(texturePath);
+	if (newTexture)
+	{
+		//newTexture->SetActive();
+		sprite->ReplaceTexture(*newTexture);
+	}
+	else
+	{
+		LogManager::GetInstance().Log("Failed to replace texture: Texture is null.");
+	}
+
+}
+static int counter = 0;
+static float timer = 0;
 void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 {
 	m_entityManager.Update();
@@ -75,10 +94,21 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 	}
 	// Process the entities
 	//m_pEntityManager.Update();
+	if (timer < 1.f)
+	{
+		timer += deltaTime;
+	}
+	else
+	{
+		timer = 0.f;
+		counter++;
+	}
 }
 
 void SceneTestLevel::Draw(Renderer& renderer)
 {
+	std::string title = "Test Level - " + std::to_string(counter);
+	renderer.DrawText(title.c_str(), 10, 10, 1.0f);
 	//renderer.DrawLine2D({ 0,0 }, { 0,1 });
 	/*renderer.DrawLine2D({ 400,700 }, { 400,750 });
 	renderer.DrawLine2D({ 400,700 }, { 450,700 });
@@ -114,6 +144,27 @@ void SceneTestLevel::SceneInfoDraw()
 {
 	ImGui::Text("Scene: Test Level");
 	DebugHelper::DrawCameraDebug(m_pCamera);
+	if (ImGui::Button("Replace Texture"))
+	{
+		// Replace the texture of the first entity's sprite
+		if (m_entityManager.GetEntities().size() > 0 && m_entityManager.GetEntities()[0]->GetComponent<CSprite>())
+		{
+			std::shared_ptr<Sprite> sprite = m_entityManager.GetEntities()[0]->GetComponent<CSprite>()->GetSprite();
+			if (sprite)
+			{
+				replaceTexture(sprite, "sprites\\ball.png");
+				LogManager::GetInstance().Log("Texture replaced successfully.");
+			}
+			else
+			{
+				LogManager::GetInstance().Log("Failed to replace texture: Sprite is null.");
+			}
+		}
+		else
+		{
+			LogManager::GetInstance().Log("No entities with sprite found.");
+		}
+	}
 }
 
 void SceneTestLevel::DebugDraw()
@@ -130,7 +181,6 @@ void SceneTestLevel::EntityManagerDebugDraw(bool& open)
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.f, 0.f, 0.f, 0.85f));
 	if (ImGui::Begin("Entity Manager", &open))
 	{
-		
 		m_entityManager.DrawDebug();
 	}
 	ImGui::End();

@@ -258,6 +258,9 @@
     <ClCompile Include="..\..\lib\imgui\backends\imgui_impl_sdl2.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="fontatlas.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="..\..\lib\imgui\backends\imgui_impl_sdl2.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="fontatlas.h">
+      <Filter>Framework\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

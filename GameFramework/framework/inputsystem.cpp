@@ -118,7 +118,13 @@ void InputSystem::ProcessInput()
 		io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 	
 		ImGui_ImplSDL2_ProcessEvent(&event);
-
+		if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE)
+		{
+			if (event.window.windowID == SDL_GetWindowID(Game::GetInstance().GetRenderer().GetWindow()))
+			{
+				Game::GetInstance().Quit();
+			}
+		}
 		
 		if (!io.WantCaptureMouse || !io.WantCaptureKeyboard)
 		{

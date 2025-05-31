@@ -42,6 +42,18 @@ bool Sprite::Initialize(Texture& texture)
 	return true;
 }
 
+void Sprite::ReplaceTexture(Texture& texture)
+{
+	if (m_pTexture != &texture)
+	{
+		m_pTexture = &texture;
+		m_width = m_pTexture->GetWidth();
+		m_height = m_pTexture->GetHeight();
+		m_centerX = m_width / 2.0f;
+		m_centerY = m_height / 2.0f;
+	}
+}
+
 void Sprite::Process(float deltaTime)
 {
 
@@ -195,4 +207,18 @@ float Sprite::GetBlueTint() const
 Texture* Sprite::GetTexture() const
 {
 	return m_pTexture;
+}
+
+unsigned int Sprite::GetTextureId() const
+{
+	return m_pTexture->GetTextureId();
+}
+
+const char* Sprite::GetTexturePath() const
+{
+	if (m_pTexture)
+	{
+		return m_pTexture->GetPath();
+	}
+	return nullptr;
 }

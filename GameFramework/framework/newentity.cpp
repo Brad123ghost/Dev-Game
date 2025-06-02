@@ -34,9 +34,9 @@ std::string NewEntity::GetTagString() const
 	{
 	case eTag::DEFAULT: return "Default";
 	case eTag::PLAYER: return "Player";
-	case eTag::ETAG_ENEMY: return "Enemy";
-	case eTag::ETAG_PROJECTILE: return "Projectile";
-	case eTag::ETAG_ITEM: return "Item";
+	case eTag::ENEMY: return "Enemy";
+	case eTag::PROJECTILE: return "Projectile";
+	case eTag::ITEM: return "Item";
 	default: return "Unknown";
 	}
 }

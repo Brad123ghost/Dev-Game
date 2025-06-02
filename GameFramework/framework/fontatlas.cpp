@@ -82,6 +82,5 @@ FontAtlas::FontAtlas(const char* fontPath, int pointSize, const char* _glyphs, T
 		
     }
 
-    SDL_FreeSurface(atlasSurface);
     TTF_CloseFont(font);
 }

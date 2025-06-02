@@ -86,13 +86,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.32.6\include;$(SolutionDir)..\lib\SDL2_image-2.8.8\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\lib\x86\;$(SolutionDir)..\lib\SDL2_image-2.6.1\lib\x86\;$(SolutionDir)..\lib\glew-2.1.0\lib\x86\;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\lib\x86;$(SolutionDir)..\lib\fmodstudioapi\api\core\lib\x86;$(SolutionDir)..\lib\box2d\lib\debug;$(SolutionDir)..\lib\discord-game-sdk\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\lib\SDL2-2.32.6\lib\x86\;$(SolutionDir)..\lib\SDL2_image-2.8.8\lib\x86\;$(SolutionDir)..\lib\glew-2.1.0\lib\x86\;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\lib\x86;$(SolutionDir)..\lib\fmodstudioapi\api\core\lib\x86;$(SolutionDir)..\lib\box2d\lib\debug;$(SolutionDir)..\lib\discord-game-sdk\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;fmod_vc.lib;box2d.lib;discord_game_sdk.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -104,14 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\include;$(SolutionDir)..\lib\SDL2_image-2.6.1\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\lib\SDL2-2.32.6\include;$(SolutionDir)..\lib\SDL2_image-2.8.8\include;$(SolutionDir)..\lib\glew-2.1.0\include;$(SolutionDir)..\lib\imgui;$(SolutionDir)..\lib\imgui\backends;$(SolutionDir)..\lib\imgui\misc\cpp;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\include;$(SolutionDir)..\lib\fmodstudioapi\api\core\inc;$(SolutionDir)..\lib\box2d\include;$(solutionDir)..\lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\lib\SDL2-2.0.22\lib\x86\;$(SolutionDir)..\lib\SDL2_image-2.6.1\lib\x86\;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\lib\x86;$(SolutionDir)..\lib\glew-2.1.0\lib\x86\;$(SolutionDir)..\lib\fmodstudioapi\api\core\lib\x86;$(SolutionDir)..\lib\box2d\lib\release;$(SolutionDir)..\lib\discord-game-sdk\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\lib\SDL2-2.32.6\lib\x86\;$(SolutionDir)..\lib\SDL2_image-2.8.8\lib\x86\;$(SolutionDir)..\lib\SDL2_ttf-2.22.0\lib\x86;$(SolutionDir)..\lib\glew-2.1.0\lib\x86\;$(SolutionDir)..\lib\fmodstudioapi\api\core\lib\x86;$(SolutionDir)..\lib\box2d\lib\release;$(SolutionDir)..\lib\discord-game-sdk\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;fmod_vc.lib;box2d.lib;discord_game_sdk.dll.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
@@ -312,6 +312,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="newentity.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="scenepausescreen.h" />
     <ClInclude Include="scenetestlevel.h" />
     <ClInclude Include="statemanager.h" />
@@ -350,6 +351,44 @@
     <None Include="..\..\Game\shaders\sprite.frag" />
     <None Include="..\..\Game\shaders\sprite.vert" />
     <None Include="debughelper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\Game\audio\SpaceInvaders\alien-hit.wav" />
+    <Media Include="..\..\Game\audio\SpaceInvaders\explosion.wav" />
+    <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framework.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Game\sprites\anim8strip.png" />
+    <Image Include="..\..\Game\sprites\anim8stripx2sheet.png" />
+    <Image Include="..\..\Game\sprites\ball.png" />
+    <Image Include="..\..\Game\sprites\board8x1.png" />
+    <Image Include="..\..\Game\sprites\board8x2.png" />
+    <Image Include="..\..\Game\sprites\board8x8.png" />
+    <Image Include="..\..\Game\sprites\crate.png" />
+    <Image Include="..\..\Game\sprites\exit-btn.png" />
+    <Image Include="..\..\Game\sprites\explosion.png" />
+    <Image Include="..\..\Game\sprites\fmodlogo.png" />
+    <Image Include="..\..\Game\sprites\GP2024S2Sheet.png" />
+    <Image Include="..\..\Game\sprites\grey_brick.png" />
+    <Image Include="..\..\Game\sprites\ground.png" />
+    <Image Include="..\..\Game\sprites\idle_left.png" />
+    <Image Include="..\..\Game\sprites\idle_right.png" />
+    <Image Include="..\..\Game\sprites\red_brick.png" />
+    <Image Include="..\..\Game\sprites\reset-btn.png" />
+    <Image Include="..\..\Game\sprites\resume-btn.png" />
+    <Image Include="..\..\Game\sprites\running_left.png" />
+    <Image Include="..\..\Game\sprites\running_right.png" />
+    <Image Include="..\..\Game\sprites\Space_Invader_BG.png" />
+    <Image Include="..\..\Game\sprites\start-btn.png" />
+    <Image Include="..\..\Game\sprites\test.jpg" />
+    <Image Include="..\..\Game\sprites\test.png" />
+    <Image Include="..\..\Game\sprites\walking_left.png" />
+    <Image Include="..\..\Game\sprites\walking_right.png" />
+    <Image Include="..\..\Game\sprites\yep.jpg" />
+    <Image Include="..\..\Game\sprites\yes.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

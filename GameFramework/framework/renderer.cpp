@@ -125,6 +125,10 @@ bool Renderer::Initialize(bool windowed, int width, int height)
 		m_pTextureManager = new TextureManager();
 		assert(m_pTextureManager);
 		initialized = m_pTextureManager->Initialize();
+		TTF_Init();
+		const char* glyphs = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+		m_pFontAtlas = new FontAtlas("arial.ttf", 24, glyphs, m_pTextureManager);
+		TTF_Quit();
 	}
 	ImGuiContext* tempgui = ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(m_pWindow, m_glContext);
@@ -143,11 +147,12 @@ bool Renderer::Initialize(bool windowed, int width, int height)
 	}
 	m_pDefaultCamera = new Camera(width, height);
 	m_pDefaultCamera->SetCamSpeed(300.f);
-
-	TTF_Init();
-	const char* glyphs = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-	m_pFontAtlas = new FontAtlas("arial.ttf", 24, glyphs, m_pTextureManager);
-
+	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+	if ((IMG_Init(imgFlags) & imgFlags) != imgFlags) {
+		std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
+		// Handle error appropriately
+	}
+	
 	return initialized;
 }
 
@@ -257,7 +262,7 @@ Sprite* Renderer::CreateSprite(const char* pcFilename)
 	assert(m_pTextureManager);
 
 	Texture* pTexture = m_pTextureManager->GetTexture(pcFilename);
-
+	//std::cout << "[Renderer] Creating texture: " << pcFilename << std::endl;
 	Sprite* pSprite = new Sprite();
 	if (!pSprite->Initialize(*pTexture))
 	{

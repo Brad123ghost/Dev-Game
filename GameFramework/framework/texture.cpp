@@ -33,7 +33,7 @@ bool Texture::Initialize(const char* pcFilename)
 {
 	m_pcName = pcFilename;
 	SDL_Surface* pSurface = IMG_Load(pcFilename);
-
+	
 	if (pSurface)
 	{
 		m_iWidth = pSurface->w;
@@ -113,6 +113,7 @@ void Texture::LoadTextTexture(const char* text, const char* fontname, int points
 
 	TTF_CloseFont(pFont);
 	pFont = 0;
+	TTF_Quit();
 }
 
 void Texture::LoadFontAtlas(const char* text, SDL_Surface* pSurface)

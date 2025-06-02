@@ -15,9 +15,9 @@ enum class eTag
 {
 	DEFAULT,
 	PLAYER,
-	ETAG_ENEMY,
-	ETAG_PROJECTILE,
-	ETAG_ITEM
+	ENEMY,
+	PROJECTILE,
+	ITEM
 };
 
 //typedef std::tuple<CTransform, CInput, CSprite> Components;

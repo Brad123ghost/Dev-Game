@@ -37,6 +37,18 @@
     <Filter Include="Discord\Source Files">
       <UniqueIdentifier>{655cdae1-2087-4a30-956f-b2c5d19eecef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{59b95a32-766d-4335-b255-938ca017276e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Audio">
+      <UniqueIdentifier>{32d680f6-0284-4486-b107-610df4df6a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Audio\Space Invaders">
+      <UniqueIdentifier>{3559a8cc-3c47-4622-9344-7d58d5bbaaf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Sprites">
+      <UniqueIdentifier>{8e7d3e0a-39e2-4fcb-991b-dc558167865b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp">
@@ -623,22 +635,127 @@
     <ClInclude Include="fontatlas.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Game\shaders\sprite.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Game\shaders\sprite.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Game\shaders\line.vert">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\Game\shaders\line.frag">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="debughelper.h">
       <Filter>Framework\Header Files</Filter>
     </None>
+    <None Include="..\..\Game\shaders\line.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\line.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\sprite.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\sprite.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\Game\audio\SpaceInvaders\alien-hit.wav">
+      <Filter>Resource Files\Audio\Space Invaders</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\SpaceInvaders\explosion.wav">
+      <Filter>Resource Files\Audio\Space Invaders</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav">
+      <Filter>Resource Files\Audio\Space Invaders</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Framework.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Game\sprites\anim8strip.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\anim8stripx2sheet.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\ball.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\board8x1.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\board8x2.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\board8x8.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\crate.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\exit-btn.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\explosion.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\fmodlogo.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\GP2024S2Sheet.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\grey_brick.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\ground.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\idle_left.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\idle_right.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\red_brick.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\reset-btn.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\resume-btn.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\running_left.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\running_right.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\Space_Invader_BG.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\start-btn.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\test.jpg">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\test.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\walking_left.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\walking_right.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\yep.jpg">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="..\..\Game\sprites\yes.jpg">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>

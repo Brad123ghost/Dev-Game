@@ -638,6 +638,9 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="debughelper.h">
@@ -666,11 +669,6 @@
     <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav">
       <Filter>Resource Files\Audio\Space Invaders</Filter>
     </Media>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Framework.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Game\sprites\anim8strip.png">

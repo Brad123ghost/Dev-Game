@@ -312,7 +312,6 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="newentity.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="scenepausescreen.h" />
     <ClInclude Include="scenetestlevel.h" />
     <ClInclude Include="statemanager.h" />
@@ -356,9 +355,6 @@
     <Media Include="..\..\Game\audio\SpaceInvaders\alien-hit.wav" />
     <Media Include="..\..\Game\audio\SpaceInvaders\explosion.wav" />
     <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Framework.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Game\sprites\anim8strip.png" />

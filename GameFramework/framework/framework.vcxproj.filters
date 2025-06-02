@@ -273,6 +273,9 @@
     <ClCompile Include="fontatlas.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sprocessinput.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -599,12 +602,6 @@
     <ClInclude Include="csprite.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="basecomponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="componentstorage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\lib\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -635,11 +632,14 @@
     <ClInclude Include="fontatlas.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="componentstorage.h">
+      <Filter>Framework\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource1.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="basecomponent.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sprocessinput.h">
+      <Filter>Framework\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

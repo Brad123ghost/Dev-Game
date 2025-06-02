@@ -53,7 +53,7 @@ Texture* TextureManager::GetTexture(const char* pcFilename)
 			LogManager::GetInstance().Log("[Texture Manager] Texture failed to initialize!");
 			assert(0);
 		}
-
+		m_TextureKeys.push_back(pcFilename);
 		m_pLoadedTextures[pcFilename] = pTexture;
 	}
 	else
@@ -100,21 +100,21 @@ void TextureManager::SelectTextureDebugDraw()
 	if (m_bShowSelect)
 	{
 		std::map<std::string, Texture*>::iterator iter = m_pLoadedTextures.begin();
-		ImGui::Begin("Select 3Texture", &m_bShowSelect);
+		ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+		ImGui::Begin("Replace Texture", &m_bShowSelect);
 		ImGui::Text("Select texture window");
 		float windowWidth = ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvail().x;
 		size_t count = 0;
-		while (iter != m_pLoadedTextures.end())
+		for (std::string e : m_TextureKeys)
 		{
-			Texture* pTexture = iter->second;
-			//pTexture->DebugDraw();
+			Texture* pTexture = m_pLoadedTextures[e];
+			pTexture->DebugDraw();
 			ImGuiStyle& style = ImGui::GetStyle();
 			float lastTexture = ImGui::GetItemRectMax().x;
 			float nextTexture = lastTexture + style.ItemSpacing.x + 50; // 50 is texture thumbnail width
 
 			if (count + 1 < m_pLoadedTextures.size() && nextTexture < windowWidth)
 				ImGui::SameLine();
-			++iter;
 			count++;
 		}
 		ImGui::End();

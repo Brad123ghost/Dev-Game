@@ -213,11 +213,12 @@ void Texture::DebugDraw()
 	{
 		std::string name = "Texture Info##" + std::to_string(m_uiTextureId);
 		ImGui::Begin(name.c_str(), &m_bIsOpen,  ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+		//ImGui::BeginChild(name.c_str());
 		ImGui::Text("Texture Name: %s", m_pcName);
 		ImGui::Text("Texture ID: %d", m_uiTextureId);
 		ImGui::Text("Texture Size: %d by %d", m_iWidth, m_iHeight);
 		ImGui::Image((ImTextureID)(intptr_t)m_uiTextureId, { static_cast<float>(m_iWidth), static_cast<float>(m_iHeight) });
-		ImGui::End();
+		ImGui::EndChild();
 	} 
 	else
 	{

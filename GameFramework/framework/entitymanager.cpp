@@ -3,6 +3,8 @@
 #include "game.h"
 #include "texturemanager.h"
 #include "renderer.h"
+#include "sprocessinput.h"
+#include "texture.h"
 EntityManager::EntityManager()
 	: m_totalEntities(0)
 {
@@ -104,24 +106,65 @@ void EntityManager::DrawDebug()
 		ImGui::EndChild();
 		return;
 	}
-	auto loadedTextures = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextures();
-	if (ImGui::Button("Select Texture"))
+	/*if (ImGui::Button("Texture Browser"))
 	{
 		Game::GetInstance().GetRenderer().GetTextureManager()->ToggleSelectTexture();
-	}
+	}*/
+	auto loadedTextureKeys = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextureKeys();
+
 	Game::GetInstance().GetRenderer().GetTextureManager()->SelectTextureDebugDraw();
-	std::map<std::string, Texture*>::iterator it = loadedTextures.begin();
-	while (it != loadedTextures.end())
+	static int selectedTextureIndex = 0;
+	const char* combo_preview_value = loadedTextureKeys[selectedTextureIndex].c_str();
+	if(ImGui::BeginCombo("Texture List", combo_preview_value))
 	{
-		ImGui::Text("%s", it->first.c_str());
-		++it;
-		//std::cout << it->first << std::endl;
+		for (int n = 0; n < loadedTextureKeys.size(); n++)
+		{
+			const bool is_selected = (selectedTextureIndex == n);
+			if (ImGui::Selectable(loadedTextureKeys[n].c_str(), is_selected))
+			{
+				selectedTextureIndex = n;
+			}
+			if (ImGui::IsItemHovered())
+			{
+				Texture* tex = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture(loadedTextureKeys[n].c_str());
+				if (tex)
+				{
+					int texWidth = tex->GetWidth();
+					int texHeight = tex->GetHeight();
+					const float maxPrevWidth = 200.f;
+					const float maxPrevHeight = 200.f;
+
+					float scale = 1.0f;
+					if (texWidth > 0 && texHeight > 0)
+					{
+						float scaleX = maxPrevWidth / texWidth;
+						float scaleY = maxPrevHeight / texHeight;
+						scale = (scaleX < scaleY) ? scaleX : scaleY;
+						if (scale > 1.0f) 
+							scale = 1.0f;
+					}
+					ImVec2 prevSize(texWidth * scale, texHeight * scale);
+
+					ImGui::BeginTooltip();
+					ImGui::Text("Texture ID: %d", tex->GetTextureId());
+					ImGui::Text("Size: %d x %d", tex->GetWidth(), tex->GetHeight());
+					ImGui::Image((ImTextureID)(intptr_t)tex->GetTextureId(), prevSize);
+					ImGui::EndTooltip();
+				}
+				else
+				{
+					ImGui::Text("Texture not found.");
+				}
+			}
+		}
+		ImGui::EndCombo();
 	}
-	Texture* temp = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture("sprites\\ball.png");
+	Texture* newTexture = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture(combo_preview_value);
 	if (ImGui::Button("Change Texture"))
 	{
-		m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite()->ReplaceTexture(*temp);
+		m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite()->ReplaceTexture(*newTexture);
 	}
+
 	ImGui::Text("Name");
 	ImGui::Text("ID: %zu", selectedEntityId);
 	ImGui::Text("Tag: %s", m_entities[selectedEntityId]->GetTagString().c_str());
@@ -134,46 +177,46 @@ void EntityManager::DrawDebug()
 	{
 		if (ImGui::CollapsingHeader("Transform", propertyFlags))
 		{
-			ImGui::BeginTable("Transform", 5);
+			ImGui::BeginTable("Transform", 6);
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::Text("Position");
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			int x = static_cast<int>(m_entities[selectedEntityId]->GetComponent<CTransform>()->position.x);
-			if (ImGui::DragInt("##xpos", &x, 1.f, 0, 0, "%d"))
-				m_entities[selectedEntityId]->GetComponent<CTransform>()->position.x = static_cast<float>(x);
+			Vector2& pos = m_entities[selectedEntityId]->GetComponent<CTransform>()->position;
+			ImGui::DragFloat("##xpos", &pos.x, 1.f, 0, 0, "%f");
 			ImGui::TableNextColumn();
 			ImGui::Text("Y");
 			ImGui::SameLine();
-			int y = static_cast<int>(m_entities[selectedEntityId]->GetComponent<CTransform>()->position.y);
-			if(ImGui::DragInt("##ypos", &y, 1.f, 0, 0, "%d"))
-				m_entities[selectedEntityId]->GetComponent<CTransform>()->position.y = static_cast<float>(y);
+			ImGui::DragFloat("##ypos", &pos.y, 1.f, 0, 0, "%f");
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::Text("Scale");
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			float xscale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.x;
-			if (ImGui::DragFloat("##xscale", &xscale, 0.1f, 0.0f, 10.0f, "%.2f"))
-				m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.x = xscale;
+			Vector2& scale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale;
+			ImGui::DragFloat("##xscale", &scale.x, 0.01f, 0.1f, 10.0f, "%.2f");
 			ImGui::TableNextColumn();
 			ImGui::Text("Y");
 			ImGui::SameLine();
-			float yscale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.y;
-			if (ImGui::DragFloat("##yscale", &yscale, 0.1f, 0.0f, 10.0f, "%.2f"))
-				m_entities[selectedEntityId]->GetComponent<CTransform>()->scale.y = yscale;
+			ImGui::DragFloat("##yscale", &scale.y, 0.01f, 0.1f, 10.0f, "%.2f");
+			ImGui::TableNextColumn();
+			if (ImGui::Button("Reset##Scale"))
+				scale = Vector2(1.0f, 1.0f);
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			ImGui::Text("Rotation");
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			float rot = m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation;
-			if(ImGui::DragFloat("##rotation", &rot, 0.1f, 0.0f, 360.0f, "%.2f", ImGuiSliderFlags_WrapAround))
-				m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation = rot;
+			float& rot = m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation;
+			ImGui::DragFloat("##rotation", &rot, 0.1f, 0.0f, 360.0f, "%.2f", ImGuiSliderFlags_WrapAround);
+			ImGui::TableNextColumn();
+			if (ImGui::Button("Reset##Rot"))
+				rot = 0.f;
+
 			ImGui::EndTable();
 		}
 	}
@@ -228,6 +271,12 @@ void EntityManager::DrawDebug()
 			
 		}
 	}
-
+	if (m_entities[selectedEntityId]->GetComponent<CInput>())
+	{
+		if (ImGui::CollapsingHeader("Input", propertyFlags))
+		{
+			SProcessInput::DrawDebug(*m_entities[selectedEntityId]->GetComponent<CInput>());
+		}
+	}
 	ImGui::EndChild();
 }

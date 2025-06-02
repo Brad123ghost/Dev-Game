@@ -7,6 +7,7 @@
 #include "debughelper.h"
 #include "texture.h"
 #include "logmanager.h"
+#include "sprocessinput.h"
 SceneTestLevel::SceneTestLevel()
 	: m_bShowGrid(false)
 	, m_bDrawAABB(false)
@@ -44,14 +45,15 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	sprite->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player->AddComponent<CSprite>(sprite);
 	player->AddComponent<CTransform>(Vector2(renderer.GetWidth() /2.f, renderer.GetHeight()/2.f));
+	player->AddComponent<CInput>();
 
-	std::shared_ptr<NewEntity> player2 = m_entityManager.CreateEntity(eTag::PLAYER);
+	std::shared_ptr<NewEntity> player2 = m_entityManager.CreateEntity(eTag::DEFAULT);
 	std::shared_ptr<Sprite> sprite2 = std::make_shared<Sprite>();
 	sprite2->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player2->AddComponent<CSprite>(sprite2);
 	player2->AddComponent<CTransform>(Vector2(250.f, 100.f));
 
-	std::shared_ptr<NewEntity> player3 = m_entityManager.CreateEntity(eTag::PLAYER);
+	std::shared_ptr<NewEntity> player3 = m_entityManager.CreateEntity(eTag::DEFAULT);
 	std::shared_ptr<Sprite> sprite3 = std::make_shared<Sprite>();
 	sprite3->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player3->AddComponent<CSprite>(sprite3);
@@ -92,6 +94,24 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 			e->GetComponent<CSprite>()->GetSprite()->SetYScale(transform->scale.y);
 		}
 	}
+
+    
+	// If entity has input and is player
+	auto& t = m_entityManager.GetEntities(eTag::PLAYER);
+	SProcessInput::ProcessPlayerInput(deltaTime, m_entityManager, inputSystem);
+	/*if (m_entityManager.GetEntities(eTag::PLAYER) != NULL)
+	{
+		CInput* input = player->GetComponent<CInput>();
+		if (input)
+		{
+			CTransform* transform = player->GetComponent<CTransform>();
+			if (input->m_bUp) transform->position.y -= 100.f * deltaTime;
+			if (input->m_bDown) transform->position.y += 100.f * deltaTime;
+			if (input->m_bLeft) transform->position.x -= 100.f * deltaTime;
+			if (input->m_bRight) transform->position.x += 100.f * deltaTime;
+		}
+	}*/
+	
 	// Process the entities
 	//m_pEntityManager.Update();
 	if (timer < 1.f)
@@ -107,8 +127,8 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 
 void SceneTestLevel::Draw(Renderer& renderer)
 {
-	std::string title = "Test Level - " + std::to_string(counter);
-	renderer.DrawText(title.c_str(), 10, 10, 1.0f);
+	/*std::string title = "Test Level - " + std::to_string(counter);
+	renderer.DrawText(title.c_str(), 10, 10, 1.0f);*/
 	//renderer.DrawLine2D({ 0,0 }, { 0,1 });
 	/*renderer.DrawLine2D({ 400,700 }, { 400,750 });
 	renderer.DrawLine2D({ 400,700 }, { 450,700 });

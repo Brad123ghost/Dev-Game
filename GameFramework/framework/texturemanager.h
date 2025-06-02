@@ -5,6 +5,7 @@
 // Library includes:
 #include <string>
 #include <map>
+#include <vector>
 
 // Forward Declarations:
 class Texture;
@@ -20,7 +21,8 @@ public:
 
 	Texture* GetTexture(const char* pcFilename);
 	void AddTexture(const char* key, Texture* pTexture);
-	std::map<std::string, Texture*>& GetLoadedTextures() { return m_pLoadedTextures; }
+	std::map<std::string, Texture*> GetLoadedTextures() const { return m_pLoadedTextures; }
+	std::vector<std::string> GetLoadedTextureKeys() const { return m_TextureKeys; }
 
 	void DebugDraw();
 	void SelectTextureDebugDraw();
@@ -36,7 +38,7 @@ public:
 
 protected:
 	std::map<std::string, Texture*> m_pLoadedTextures;
-
+	std::vector<std::string> m_TextureKeys;
 private:
 	bool m_bShowSelect;
 };

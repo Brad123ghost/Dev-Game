@@ -59,10 +59,18 @@ void Sprite::Process(float deltaTime)
 
 }
 
-void Sprite::Draw(Renderer& renderer, Camera* camera)
+void Sprite::Draw(Renderer& renderer, DrawMode mode)
+{
+	Draw(renderer, nullptr, mode);
+}
+
+void Sprite::Draw(Renderer& renderer, Camera* camera, DrawMode mode)
 {
 	m_pTexture->SetActive();
-	renderer.DrawSprite(*this, camera);
+	if(mode == WORLD)
+		renderer.DrawSprite(*this, camera);
+	else if(mode == SCREEN)
+		renderer.DrawUI(*this);
 }
 
 void Sprite::SetX(int x)

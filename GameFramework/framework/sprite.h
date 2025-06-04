@@ -9,6 +9,12 @@ class Renderer;
 class Texture;
 class Camera;
 
+enum DrawMode
+{
+	WORLD,
+	SCREEN
+};
+
 class Sprite
 {
 	// Member methods:
@@ -19,13 +25,44 @@ public:
 	bool Initialize(Texture& texture);
 	void ReplaceTexture(Texture& texture);
 	void Process(float deltaTime);
-	void Draw(Renderer& renderer, Camera* camera = nullptr);
+	/**
+	 * @brief  Draw with the default viewport
+	 *
+	 * @param  renderer: reference to the renderer
+	 * @param  mode (optionial):  either WORLD or SCREEN, default is WORLD
+	 * 
+	 */
+	void Draw(Renderer& renderer, DrawMode mode = WORLD);
+	/**
+	 * @brief  Draw with a specific camera
+	 *
+	 * @param  renderer: reference to the renderer
+	 * @param  camera: current active camera.
+	 * @param  mode (optionial):  either WORLD or SCREEN, default is WORLD
+	 *
+	 */
+	void Draw(Renderer& renderer, Camera* camera, DrawMode mode = WORLD);
 
 	int GetWidth() const;
 	int GetHeight() const;
-
+	/**
+	 * @brief  Set the X world position of the sprite.
+	 *
+	 * By default this is in world coordinates, 0 being at center of the screen.
+	 * 
+	 * If wanting to use as screen coordinates, pass SCREEN as a parameter when calling DRAW.
+	 * 
+	 */
 	void SetX(int x);
 	int GetX() const;
+	/**
+	 * @brief  Set the Y world position of the sprite.
+	 *
+	 * By default this is in world coordinates, 0 being at center of the screen.
+	 *
+	 * If wanting to use as screen coordinates, pass SCREEN as a parameter when calling DRAW.
+	 *
+	 */
 	void SetY(int y);
 	int GetY() const;
 

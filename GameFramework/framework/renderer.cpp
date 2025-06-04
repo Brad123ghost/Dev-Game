@@ -28,6 +28,8 @@
 #include <SDL_ttf.h>
 //#include <vector>
 
+Camera* g_pDefaultCamera = nullptr;
+
 Renderer::Renderer()
 	: m_pTextureManager(0)
 	, m_pSpriteShader(0)
@@ -64,8 +66,8 @@ Renderer::~Renderer()
 	delete m_pTextureManager;
 	m_pTextureManager = 0;
 
-	delete m_pDefaultCamera;
-	m_pDefaultCamera = 0;
+	delete g_pDefaultCamera;
+	g_pDefaultCamera = 0;
 
 	delete m_pFontAtlas;
 	m_pFontAtlas = 0;
@@ -145,8 +147,8 @@ bool Renderer::Initialize(bool windowed, int width, int height)
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
-	m_pDefaultCamera = new Camera(width, height);
-	m_pDefaultCamera->SetCamSpeed(300.f);
+	g_pDefaultCamera = new Camera(width, height);
+	g_pDefaultCamera->SetCamSpeed(300.f);
 	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
 	if ((IMG_Init(imgFlags) & imgFlags) != imgFlags) {
 		std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
@@ -312,6 +314,7 @@ void Renderer::dump()
 	bool loaded = m_pGridShader->Load("shaders\\line.vert", "shaders\\line.frag");
 }
 
+// Render Sprites using world coords
 void Renderer::DrawSprite(Sprite& sprite, Camera* pCamera)
 {
 	m_pSpriteShader->SetActive();
@@ -330,14 +333,14 @@ void Renderer::DrawSprite(Sprite& sprite, Camera* pCamera)
 	world.m[0][0] = cosf(angleInRadians) * (sizeX);
 	world.m[0][1] = -sinf(angleInRadians) * (sizeX) * -1.0f; // Multiply by -1.0f, fixes rotation
 	world.m[1][0] = sinf(angleInRadians) * (sizeY);
-	//world.m[1][1] = cosf(angleInRadians) * (sizeY) ;  
 	world.m[1][1] = cosf(angleInRadians) * (sizeY) * -1.0f; // Multiply by -1.0f, fixes upsidedown sprites
-	world.m[3][0] = static_cast<float>(sprite.GetX());
-	world.m[3][1] = static_cast<float>(sprite.GetY());
+	Vector2 screenPos = v2WorldToScreen({ static_cast<float>(sprite.GetX()), static_cast<float>(sprite.GetY()) });
+	world.m[3][0] = screenPos.x;
+	world.m[3][1] = screenPos.y;
 
 	m_pSpriteShader->SetMatrixUniform("uWorldTransform", world);
 
-	Camera* activeCam = pCamera ? pCamera : m_pDefaultCamera;
+	Camera* activeCam = pCamera ? pCamera : g_pDefaultCamera;
 	Matrix4 view = activeCam->GetViewMatrix();
 
 	Matrix4 orthoViewProj;
@@ -353,6 +356,48 @@ void Renderer::DrawSprite(Sprite& sprite, Camera* pCamera)
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	//glUseProgram(0);
+}
+
+// Used to render sprites using screen coords
+void Renderer::DrawUI(Sprite& sprite)
+{
+	m_pSpriteShader->SetActive();
+	m_pSpriteVertexData->SetActive();
+
+	float angleInDegrees = sprite.GetAngle();
+
+	float sizeX = static_cast<float>(sprite.GetWidth());
+	float sizeY = static_cast<float>(sprite.GetHeight());
+
+	const float PI = 3.14159f;
+	float angleInRadians = (angleInDegrees * PI) / 180.0f;
+
+	Matrix4 world;
+	SetIdentity(world);
+	world.m[0][0] = cosf(angleInRadians) * (sizeX);
+	world.m[0][1] = -sinf(angleInRadians) * (sizeX) * -1.0f; // Multiply by -1.0f, fixes rotation
+	world.m[1][0] = sinf(angleInRadians) * (sizeY);
+	world.m[1][1] = cosf(angleInRadians) * (sizeY) * -1.0f; // Multiply by -1.0f, fixes upsidedown sprites
+	world.m[3][0] = static_cast<float>(sprite.GetX());
+	world.m[3][1] = static_cast<float>(sprite.GetY());
+
+	m_pSpriteShader->SetMatrixUniform("uWorldTransform", world);
+
+	Camera* activeCam = g_pDefaultCamera;
+	Matrix4 view = activeCam->GetViewMatrix();
+
+	Matrix4 orthoViewProj;
+	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
+
+	m_pSpriteShader->SetVector4Uniform("color", sprite.GetRedTint(), sprite.GetGreenTint(), sprite.GetBlueTint(), sprite.GetAlpha());
+	Matrix4 newView = Multiply(view, orthoViewProj);
+	m_pSpriteShader->SetMatrixUniform("uViewProj", newView);
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::DrawTest()
@@ -396,7 +441,7 @@ void Renderer::DrawAnimatedSprite(AnimatedSprite& sprite, int frame)
 	world.m[3][1] = static_cast<float>(sprite.GetY());
 
 	m_pSpriteShader->SetMatrixUniform("uWorldTransform", world);
-	Camera* activeCam = m_pDefaultCamera;
+	Camera* activeCam = g_pDefaultCamera;
 	Matrix4 view = activeCam->GetViewMatrix();
 	Matrix4 orthoViewProj;
 	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
@@ -426,7 +471,7 @@ void Renderer::DrawText(const char* pText, float x, float y, float scale, const 
 	SetIdentity(world);
 
 	m_pSpriteShader->SetMatrixUniform("uWorldTransform", world);
-	Camera* activeCam = m_pDefaultCamera;
+	Camera* activeCam = g_pDefaultCamera;
 	Matrix4 view = activeCam->GetViewMatrix();
 	Matrix4 orthoViewProj;
 	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
@@ -546,7 +591,7 @@ void Renderer::DrawLineFlush(Camera* pCamera)
 	world.m[1][1] = cosf(angleInRadians) * (sizeY);*/
 
 	m_pGridShader->SetMatrixUniform("uWorldTransform", world);
-	Camera* activeCam = pCamera ? pCamera : m_pDefaultCamera;
+	Camera* activeCam = pCamera ? pCamera : g_pDefaultCamera;
 	Matrix4 view = activeCam->GetViewMatrix();
 	Matrix4 orthoViewProj;
 	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));

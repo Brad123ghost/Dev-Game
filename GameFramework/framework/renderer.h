@@ -21,6 +21,8 @@ struct SDL_Window;
 #include "glm.hpp"
 #include "fontatlas.h"
 
+extern Camera* g_pDefaultCamera;
+
 class Renderer
 {
 	// Member methods:
@@ -43,6 +45,7 @@ public:
 	Texture* CreateTexture(const char* pcFilename);
 	//void DrawSprite(Sprite& sprite);
 	void DrawSprite(Sprite& sprite, Camera* pCamera = nullptr);
+	void DrawUI(Sprite& sprite);
 	AnimatedSprite* CreateAnimatedSprite(const char* pcFilename);
 	void DrawAnimatedSprite(AnimatedSprite& sprite, int frame);
 	void DrawTest();
@@ -52,7 +55,7 @@ public:
 
 	void DrawAABB(float x, float y, float width, float height);
 
-	Camera& GetDefaultCamera() { return *m_pDefaultCamera; }
+	Camera& GetDefaultCamera() { return *g_pDefaultCamera; }
 
 	void DrawDebug();
 
@@ -105,8 +108,6 @@ protected:
 
 private:
 	float m_gridSize;
-	Camera* m_pDefaultCamera;
-
 };
 
 #endif // __RENDERER_H_

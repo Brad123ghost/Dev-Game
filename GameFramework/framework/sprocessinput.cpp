@@ -1,7 +1,7 @@
 #include "sprocessinput.h"
 #include "imgui.h"
 
-void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, InputSystem& inputSystem)
+void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, InputSystem& inputSystem, const Camera& camera)
 {
 	for (auto& e : entityManager.GetEntities(eTag::PLAYER))
 	{
@@ -29,8 +29,14 @@ void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, I
 				dir.Normalize();
 
 			float moveSpeed = input->m_bShift ? input->m_fSprintSpeed : input->m_fWalkSpeed;
+
+			// Update Screen position
 			transform->position.x += dir.x * moveSpeed * dt;
 			transform->position.y += dir.y * moveSpeed * dt;
+			// Update world postion
+			Vector2 tempj = v2ScreenToWorld(transform->position);
+			//std::cout << "World Position: (" << tempj.x << ", " << tempj.y << ")" << std::endl;
+			transform->worldPosition = tempj;
 		}
 	}
 }

@@ -141,9 +141,6 @@
     <ClCompile Include="animatedsprite.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderer.cpp">
-      <Filter>Framework\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
     <ClCompile Include="newentity.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="entitymanager.cpp">
-      <Filter>Framework\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="csprite.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
@@ -274,6 +268,12 @@
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sprocessinput.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entitymanager.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

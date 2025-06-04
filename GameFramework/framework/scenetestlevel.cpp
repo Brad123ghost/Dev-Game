@@ -8,6 +8,7 @@
 #include "texture.h"
 #include "logmanager.h"
 #include "sprocessinput.h"
+
 SceneTestLevel::SceneTestLevel()
 	: m_bShowGrid(false)
 	, m_bDrawAABB(false)
@@ -21,6 +22,7 @@ SceneTestLevel::SceneTestLevel()
 
 SceneTestLevel::~SceneTestLevel()
 {
+
 	delete m_pTestSprite;
 	m_pTestSprite = 0;
 
@@ -36,28 +38,28 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 
 	renderer.SetClearColor(0, 0, 0);
 	m_pTestSprite = renderer.CreateSprite("sprites\\crate.png");
-	m_pTestSprite->SetX(100);
-	m_pTestSprite->SetY(100);
+	m_pTestSprite->SetX(300);
+	m_pTestSprite->SetY(300);
 
 	// Add player
-	std::shared_ptr<NewEntity> player = m_entityManager.CreateEntity(eTag::PLAYER);
+	std::shared_ptr<NewEntity> player = m_entityManager.CreateEntity("Player", eTag::PLAYER);
 	std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
 	sprite->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player->AddComponent<CSprite>(sprite);
-	player->AddComponent<CTransform>(Vector2(renderer.GetWidth() /2.f, renderer.GetHeight()/2.f));
+	player->AddComponent<CTransform>(Vector2(0, 0));
 	player->AddComponent<CInput>();
 
-	std::shared_ptr<NewEntity> player2 = m_entityManager.CreateEntity(eTag::DEFAULT);
+	std::shared_ptr<NewEntity> player2 = m_entityManager.CreateEntity("Dummy 1", eTag::DEFAULT);
 	std::shared_ptr<Sprite> sprite2 = std::make_shared<Sprite>();
 	sprite2->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player2->AddComponent<CSprite>(sprite2);
-	player2->AddComponent<CTransform>(Vector2(250.f, 100.f));
+	player2->AddComponent<CTransform>(Vector2(-250.f, -250));
 
-	std::shared_ptr<NewEntity> player3 = m_entityManager.CreateEntity(eTag::DEFAULT);
+	std::shared_ptr<NewEntity> player3 = m_entityManager.CreateEntity("Dummy 1", eTag::DEFAULT);
 	std::shared_ptr<Sprite> sprite3 = std::make_shared<Sprite>();
 	sprite3->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
 	player3->AddComponent<CSprite>(sprite3);
-	player3->AddComponent<CTransform>(Vector2(0, 0));
+	player3->AddComponent<CTransform>(Vector2(-300, 300));
 	return true;
 }
 
@@ -98,7 +100,7 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
     
 	// If entity has input and is player
 	auto& t = m_entityManager.GetEntities(eTag::PLAYER);
-	SProcessInput::ProcessPlayerInput(deltaTime, m_entityManager, inputSystem);
+	SProcessInput::ProcessPlayerInput(deltaTime, m_entityManager, inputSystem, *m_pCamera);
 	/*if (m_entityManager.GetEntities(eTag::PLAYER) != NULL)
 	{
 		CInput* input = player->GetComponent<CInput>();
@@ -163,28 +165,7 @@ void SceneTestLevel::Draw(Renderer& renderer)
 void SceneTestLevel::SceneInfoDraw()
 {
 	ImGui::Text("Scene: Test Level");
-	DebugHelper::DrawCameraDebug(m_pCamera);
-	if (ImGui::Button("Replace Texture"))
-	{
-		// Replace the texture of the first entity's sprite
-		if (m_entityManager.GetEntities().size() > 0 && m_entityManager.GetEntities()[0]->GetComponent<CSprite>())
-		{
-			std::shared_ptr<Sprite> sprite = m_entityManager.GetEntities()[0]->GetComponent<CSprite>()->GetSprite();
-			if (sprite)
-			{
-				replaceTexture(sprite, "sprites\\ball.png");
-				LogManager::GetInstance().Log("Texture replaced successfully.");
-			}
-			else
-			{
-				LogManager::GetInstance().Log("Failed to replace texture: Sprite is null.");
-			}
-		}
-		else
-		{
-			LogManager::GetInstance().Log("No entities with sprite found.");
-		}
-	}
+	DebugHelper::DrawCameraDebug(m_pCamera, &m_entityManager);
 }
 
 void SceneTestLevel::DebugDraw()

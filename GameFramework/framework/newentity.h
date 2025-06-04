@@ -27,7 +27,7 @@ class NewEntity
 public:
 	friend class EntityManager;
 
-	NewEntity(size_t id, eTag tag = eTag::DEFAULT, ComponentStorage* storage = nullptr);
+	NewEntity(size_t id, std::string name = "Default", eTag tag = eTag::DEFAULT, ComponentStorage* storage = nullptr);
 	~NewEntity();
 
 	void SetDead();
@@ -63,6 +63,7 @@ public:
 	}
 
 private:
+	std::string m_strName;
 	bool m_bAlive;
 	eTag m_eTag;
 	size_t m_iId = 0;

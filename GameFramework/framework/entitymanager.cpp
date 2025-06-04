@@ -31,9 +31,9 @@ void EntityManager::Update()
 	}
 }
 
-std::shared_ptr<NewEntity> EntityManager::CreateEntity(const eTag tag)
+std::shared_ptr<NewEntity> EntityManager::CreateEntity(std::string name, const eTag tag)
 {
-	std::shared_ptr<NewEntity> newEntity = std::shared_ptr<NewEntity>(new NewEntity(m_totalEntities++, tag, &m_componentStorage));
+	std::shared_ptr<NewEntity> newEntity = std::shared_ptr<NewEntity>(new NewEntity(m_totalEntities++, name, tag, &m_componentStorage));
 	m_entitiesToAdd.push_back(newEntity);
 	return newEntity;
 }
@@ -115,7 +115,8 @@ void EntityManager::DrawDebug()
 	Game::GetInstance().GetRenderer().GetTextureManager()->SelectTextureDebugDraw();
 	static int selectedTextureIndex = 0;
 	const char* combo_preview_value = loadedTextureKeys[selectedTextureIndex].c_str();
-	if(ImGui::BeginCombo("Texture List", combo_preview_value))
+	ImGui::Text("Texture List");
+	if(ImGui::BeginCombo("##Texture List", combo_preview_value))
 	{
 		for (int n = 0; n < loadedTextureKeys.size(); n++)
 		{

@@ -1,8 +1,9 @@
 #include "newentity.h"
 
-NewEntity::NewEntity(size_t id, eTag tag, ComponentStorage* storage)
+NewEntity::NewEntity(size_t id, std::string name, eTag tag, ComponentStorage* storage)
 	: m_bAlive(true)
 	, m_iId(id)
+	, m_strName(name)
 	, m_eTag(tag)
 	, m_pComponentStorage(storage)
 {

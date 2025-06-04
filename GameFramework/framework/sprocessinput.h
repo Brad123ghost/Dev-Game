@@ -4,11 +4,12 @@
 
 #include "entitymanager.h"
 #include "inputsystem.h"
+#include "camera.h"
 
 class SProcessInput
 {
 public:
-	static void ProcessPlayerInput(float dt, EntityManager& entityManager, InputSystem& inputSystem);
+	static void ProcessPlayerInput(float dt, EntityManager& entityManager, InputSystem& inputSystem, const Camera& camera);
 	static void DrawDebug(CInput& cInput);
 };
 

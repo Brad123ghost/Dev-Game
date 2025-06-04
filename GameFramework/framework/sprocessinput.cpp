@@ -33,10 +33,6 @@ void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, I
 			// Update Screen position
 			transform->position.x += dir.x * moveSpeed * dt;
 			transform->position.y += dir.y * moveSpeed * dt;
-			// Update world postion
-			Vector2 tempj = v2ScreenToWorld(transform->position);
-			//std::cout << "World Position: (" << tempj.x << ", " << tempj.y << ")" << std::endl;
-			transform->worldPosition = tempj;
 		}
 	}
 }

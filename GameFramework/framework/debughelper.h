@@ -3,10 +3,11 @@
 #define __DEBUGHELPER_H_
 
 class Camera;
+class EntityManager;
 
 class DebugHelper {
 public:
-	static void DrawCameraDebug(Camera* pCamera);
+	static void DrawCameraDebug(Camera* pCamera, EntityManager* pEntitiyManager);
 	static void DrawGridDebug(int& gSize, int& cSize, bool& showGrid);
 };
 

@@ -69,8 +69,10 @@ void Sprite::Draw(Renderer& renderer, Camera* camera, DrawMode mode)
 	m_pTexture->SetActive();
 	if(mode == WORLD)
 		renderer.DrawSprite(*this, camera);
-	else if(mode == SCREEN)
+	else if (mode == SCREEN)
 		renderer.DrawUI(*this);
+	else if (mode == OUTLINE)
+		renderer.DrawOutline(*this, camera);
 }
 
 void Sprite::SetX(int x)

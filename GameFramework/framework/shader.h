@@ -14,13 +14,15 @@ public:
 	Shader();
 	~Shader();
 
-	bool Load(const char* vertexFile, const char* pixelFile);
+	bool Load(const char* vertexFile, const char* pixelFile, const char* geomFile = "\0");
 	void Unload();
 
 	void SetActive();
 
 	void SetMatrixUniform(const char* name, const Matrix4& matrix);
 	void SetVector4Uniform(const char* name, float x, float y, float z, float w);
+	void SetFloatUniform(const char* name, float value);
+	void SetIntUniform(const char* name, int value);
 
 protected:
 
@@ -36,6 +38,7 @@ public:
 protected:
 	GLuint m_vertexShader;
 	GLuint m_pixelShader;
+	GLuint m_geometryShader;
 	GLuint m_shaderProgram;
 
 private:

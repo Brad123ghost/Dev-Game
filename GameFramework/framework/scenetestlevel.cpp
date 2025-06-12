@@ -3,6 +3,7 @@
 #include "renderer.h"
 #include "imgui.h"
 #include "sprite.h"
+#include "animatedsprite.h"
 #include "camera.h"
 #include "debughelper.h"
 #include "texture.h"
@@ -29,10 +30,32 @@ SceneTestLevel::~SceneTestLevel()
 	delete m_pCamera;
 	m_pCamera = 0;
 
+	delete m_pWalkLeft;
+	m_pWalkLeft = 0;
+
+	delete m_pWalkRight;
+	m_pWalkRight = 0;
+
 }
 
 bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 {
+	m_pWalkLeft = renderer.CreateAnimatedSprite("sprites\\walking_left.png");
+	m_pWalkLeft->SetX(100);
+	m_pWalkLeft->SetY(100);
+	m_pWalkLeft->SetupFrames(64, 64);
+	m_pWalkLeft->SetFrameDuration(0.1f);
+	m_pWalkLeft->SetLooping(true);
+	m_pWalkLeft->Animate();
+
+	m_pWalkRight = renderer.CreateAnimatedSprite("sprites\\walking_right.png");
+	m_pWalkRight->SetX(100);
+	m_pWalkRight->SetY(200);
+	m_pWalkRight->SetupFrames(64, 64);
+	m_pWalkRight->SetFrameDuration(0.1f);
+	m_pWalkRight->SetLooping(true);
+	m_pWalkRight->Animate();
+
 	m_pRenderer = &renderer;
 	m_pCamera = new Camera(renderer.GetWidth(), renderer.GetHeight());
 
@@ -40,11 +63,12 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	m_pTestSprite = renderer.CreateSprite("sprites\\crate.png");
 	m_pTestSprite->SetX(300);
 	m_pTestSprite->SetY(300);
+	m_pTestSprite->SetScale(0.5f);
 
 	// Add player
 	std::shared_ptr<NewEntity> player = m_entityManager.CreateEntity("Player", eTag::PLAYER);
 	std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
-	sprite->Initialize(*renderer.CreateTexture("sprites\\crate.png"));
+	sprite->Initialize(*renderer.CreateTexture("sprites\\ball.png"));
 	player->AddComponent<CSprite>(sprite);
 	player->AddComponent<CTransform>(Vector2(0, 0));
 	player->AddComponent<CInput>();
@@ -81,6 +105,15 @@ static int counter = 0;
 static float timer = 0;
 void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 {
+	// Process animation temp 
+	if (m_pWalkLeft->IsAnimating())
+	{
+		m_pWalkLeft->Process(deltaTime);
+	}
+	if (m_pWalkRight->IsAnimating())
+	{
+		m_pWalkRight->Process(deltaTime);
+	}
 	m_entityManager.Update();
 	m_pCamera->Process(deltaTime, inputSystem);
 	// If has sprite and transform, update sprite position/rot
@@ -115,7 +148,7 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 	}*/
 	
 	// Process the entities
-	//m_pEntityManager.Update();
+	////m_pEntityManager.Update();
 	if (timer < 1.f)
 	{
 		timer += deltaTime;
@@ -129,6 +162,16 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 
 void SceneTestLevel::Draw(Renderer& renderer)
 {
+	// Animation draw
+	if (m_pWalkLeft->IsAnimating())
+	{
+		m_pWalkLeft->Draw(renderer);
+	}
+	if (m_pWalkRight->IsAnimating())
+	{
+		m_pWalkRight->Draw(renderer);
+	}
+
 	/*std::string title = "Test Level - " + std::to_string(counter);
 	renderer.DrawText(title.c_str(), 10, 10, 1.0f);*/
 	//renderer.DrawLine2D({ 0,0 }, { 0,1 });
@@ -144,7 +187,7 @@ void SceneTestLevel::Draw(Renderer& renderer)
 		renderer.DrawLineFlush(currentCam);
 
 	}
-	m_pTestSprite->Draw(renderer, currentCam);
+	m_pTestSprite->Draw(renderer, m_pCamera, OUTLINE);
 
 	// Draw Entities
 	for(auto& e : m_entityManager.GetEntities())
@@ -152,7 +195,7 @@ void SceneTestLevel::Draw(Renderer& renderer)
 		
 		if(e->GetComponent<CSprite>())
 		{
-			e->GetComponent<CSprite>()->GetSprite()->Draw(renderer, currentCam);
+			e->GetComponent<CSprite>()->GetSprite()->Draw(renderer, currentCam, OUTLINE);
 		}
 	}
 

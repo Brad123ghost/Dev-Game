@@ -63,6 +63,9 @@ Renderer::~Renderer()
 	delete m_pGridVertexData;
 	m_pGridVertexData = 0;
 
+	delete m_pOutlineShader;
+	m_pOutlineShader = 0;
+
 	delete m_pTextureManager;
 	m_pTextureManager = 0;
 
@@ -312,6 +315,9 @@ void Renderer::dump()
 {
 	m_pGridShader = new Shader();
 	bool loaded = m_pGridShader->Load("shaders\\line.vert", "shaders\\line.frag");
+
+	m_pOutlineShader = new Shader();
+	m_pOutlineShader->Load("shaders\\outline.vert", "shaders\\outline.frag", "shaders\\outline.geom");
 }
 
 // Render Sprites using world coords
@@ -347,7 +353,7 @@ void Renderer::DrawSprite(Sprite& sprite, Camera* pCamera)
 	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
 
 	m_pSpriteShader->SetVector4Uniform("color", sprite.GetRedTint(), sprite.GetGreenTint(), sprite.GetBlueTint(), sprite.GetAlpha());
-	Matrix4 newView = Multiply(view, orthoViewProj);
+	Matrix4 newView = Multiply(orthoViewProj, view);
 	m_pSpriteShader->SetMatrixUniform("uViewProj", newView);
 	
 
@@ -390,7 +396,7 @@ void Renderer::DrawUI(Sprite& sprite)
 	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
 
 	m_pSpriteShader->SetVector4Uniform("color", sprite.GetRedTint(), sprite.GetGreenTint(), sprite.GetBlueTint(), sprite.GetAlpha());
-	Matrix4 newView = Multiply(view, orthoViewProj);
+	Matrix4 newView = Multiply(orthoViewProj, view);
 	m_pSpriteShader->SetMatrixUniform("uViewProj", newView);
 
 
@@ -398,6 +404,56 @@ void Renderer::DrawUI(Sprite& sprite)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer::DrawOutline(Sprite& sprite, Camera* pCamera)
+{
+	m_pOutlineShader->SetActive();
+	//m_pSpriteShader->SetActive();
+	m_pSpriteVertexData->SetActive();
+	
+
+	float angleInDegrees = sprite.GetAngle();
+
+	float sizeX = static_cast<float>(sprite.GetWidth());
+	float sizeY = static_cast<float>(sprite.GetHeight());
+
+	const float PI = 3.14159f;
+	float angleInRadians = (angleInDegrees * PI) / 180.0f;
+
+	Matrix4 world;
+	SetIdentity(world);
+	world.m[0][0] = cosf(angleInRadians) * (sizeX);
+	world.m[0][1] = -sinf(angleInRadians) * (sizeX) * -1.0f; // Multiply by -1.0f, fixes rotation
+	world.m[1][0] = sinf(angleInRadians) * (sizeY);
+	world.m[1][1] = cosf(angleInRadians) * (sizeY) * -1.0f; // Multiply by -1.0f, fixes upsidedown sprites
+	Vector2 screenPos = v2WorldToScreen({ static_cast<float>(sprite.GetX()), static_cast<float>(sprite.GetY()) });
+	world.m[3][0] = screenPos.x;
+	world.m[3][1] = screenPos.y;
+
+	m_pOutlineShader->SetMatrixUniform("uWorldTransform", world);
+
+	Camera* activeCam = pCamera ? pCamera : g_pDefaultCamera;
+	Matrix4 view = activeCam->GetViewMatrix();
+
+	Matrix4 orthoViewProj;
+	CreateOrthoProjection(orthoViewProj, static_cast<float>(m_iWidth), static_cast<float>(m_iHeight));
+
+	m_pOutlineShader->SetVector4Uniform("color", 1.0f, 1.0f, 1.0f, 1.0f);
+	Matrix4 newView = Multiply(orthoViewProj, view);
+	m_pOutlineShader->SetMatrixUniform("uViewProj", newView);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, sprite.GetTextureId());
+	m_pOutlineShader->SetIntUniform("uTexture", 0);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_pOutlineShader->SetIntUniform("uDrawTexture", 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	m_pOutlineShader->SetIntUniform("uDrawTexture", 1);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 }
 
 void Renderer::DrawTest()
@@ -410,13 +466,13 @@ AnimatedSprite* Renderer::CreateAnimatedSprite(const char* pcFilename)
 	assert(m_pTextureManager);
 
 	Texture* pTexture = m_pTextureManager->GetTexture(pcFilename);
-
+	pTexture->SetAnimated();
 	AnimatedSprite* pSprite = new AnimatedSprite();
 	if (!pSprite->Initialize(*pTexture))
 	{
-		LogManager::GetInstance().Log("AniamtedSprite failed to create!");
+		LogManager::GetInstance().Log("Aniamted Sprite failed to create!");
+		assert(0);
 	}
-
 	return pSprite;
 }
 
@@ -436,7 +492,7 @@ void Renderer::DrawAnimatedSprite(AnimatedSprite& sprite, int frame)
 	world.m[0][0] = cosf(angleInRadians) * (sizeX);
 	world.m[0][1] = -sinf(angleInRadians) * (sizeX);
 	world.m[1][0] = sinf(angleInRadians) * (sizeY);
-	world.m[1][1] = cosf(angleInRadians) * (sizeY); // Multiply by -1.0f to flip back the sprite sheet
+	world.m[1][1] = cosf(angleInRadians) * (sizeY);
 	world.m[3][0] = static_cast<float>(sprite.GetX());
 	world.m[3][1] = static_cast<float>(sprite.GetY());
 
@@ -643,4 +699,17 @@ void Renderer::GenerateGrid(int gSize, int cSize)
 		DrawLine2D({ x, 0 }, { x, MAX_SIZE });
 	}
 
+}
+
+bool Renderer::ReloadShaders()
+{
+	bool spriteShader = m_pSpriteShader->Load("shaders\\sprite.vert", "shaders\\sprite.frag");
+	bool outlineShader = m_pOutlineShader->Load("shaders\\outline.vert", "shaders\\outline.frag", "shaders\\outline.geom");
+	if (!spriteShader || !outlineShader)
+	{
+		LogManager::GetInstance().Log("Failed to reload shaders!");
+		return false;
+	}
+	LogManager::GetInstance().Log("Shaders reloaded");
+	return true;
 }

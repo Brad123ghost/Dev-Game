@@ -112,7 +112,6 @@ void EntityManager::DrawDebug()
 	}*/
 	auto loadedTextureKeys = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextureKeys();
 
-	Game::GetInstance().GetRenderer().GetTextureManager()->SelectTextureDebugDraw();
 	static int selectedTextureIndex = 0;
 	const char* combo_preview_value = loadedTextureKeys[selectedTextureIndex].c_str();
 	ImGui::Text("Texture List");

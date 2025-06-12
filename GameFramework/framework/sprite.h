@@ -12,7 +12,8 @@ class Camera;
 enum DrawMode
 {
 	WORLD,
-	SCREEN
+	SCREEN,
+	OUTLINE
 };
 
 class Sprite
@@ -29,7 +30,7 @@ public:
 	 * @brief  Draw with the default viewport
 	 *
 	 * @param  renderer: reference to the renderer
-	 * @param  mode (optionial):  either WORLD or SCREEN, default is WORLD
+	 * @param  mode (optionial): WORLD, SCREEN or OUTLINE, default is WORLD
 	 * 
 	 */
 	void Draw(Renderer& renderer, DrawMode mode = WORLD);
@@ -38,7 +39,7 @@ public:
 	 *
 	 * @param  renderer: reference to the renderer
 	 * @param  camera: current active camera.
-	 * @param  mode (optionial):  either WORLD or SCREEN, default is WORLD
+	 * @param  mode (optionial): WORLD, SCREEN or OUTLINE, default is WORLD
 	 *
 	 */
 	void Draw(Renderer& renderer, Camera* camera, DrawMode mode = WORLD);

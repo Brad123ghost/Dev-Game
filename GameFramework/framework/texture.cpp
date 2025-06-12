@@ -65,7 +65,7 @@ bool Texture::Initialize(const char* pcFilename)
 	}
 	else
 	{
-		LogManager::GetInstance().Log("Texture failed to load!");
+		LogManager::GetInstance().Log("[Texture] Texture failed to load!");
 		assert(0);
 		return false;
 	}
@@ -161,64 +161,66 @@ void Texture::LoadSurfaceIntoTexture(SDL_Surface* pSurface)
 	}
 }
 
-void Texture::DebugDraw()
+void Texture::DebugDraw(float sizing)
 {
+
 	ImGui::PushID(this);
 
-	const float desiredWidth = 50.0f;
-	const float desiredHeight = 50.0f;
+	const float desiredWidth = sizing;
+	const float desiredHeight = sizing;
 	float widthScalingFactor = desiredWidth / static_cast<float>(m_iWidth);
 	float heightScalingFactor = desiredHeight / static_cast<float>(m_iHeight);
 	float scalingFactor = std::min(widthScalingFactor, heightScalingFactor);
 
-	ImVec2 size;
-	size.x = static_cast<float>(m_iWidth) * scalingFactor;
-	size.y = static_cast<float>(m_iHeight) * scalingFactor;
+	ImVec2 imgSize;
+	imgSize.x = static_cast<float>(m_iWidth) * scalingFactor;
+	imgSize.y = static_cast<float>(m_iHeight) * scalingFactor;
 
 	// Calculate display size
-	const float display_size = 50.0f;
-	ImVec2 selectableSize(display_size, display_size);
+	const float display_size = sizing;
 
-	// Get current position before drawing
-	ImVec2 pos = ImGui::GetCursorScreenPos();
-
+	float textHeight = ImGui::GetFontSize() + 4.f;
 	ImVec2 offset;
-	offset.x = (selectableSize.x - size.x) / 2.0f;
-	offset.y = (selectableSize.y - size.y) / 2.0f;
-	
-	// Draw the image first
+	offset.x = (display_size - imgSize.x) * .5f;
+	offset.y = (display_size - imgSize.y) * .5f;
+
+	ImGui::BeginChild("##texturebox", { desiredWidth, desiredHeight + textHeight + ImGui::GetStyle().ItemSpacing.y});
+	ImVec2 pos = ImGui::GetCursorScreenPos();
+	ImVec2 imgPos = ImVec2(pos.x + offset.x, pos.y + offset.y);
+	if (ImGui::Selectable("##textureselectable", &m_bIsSelected, 0, ImVec2(desiredWidth, desiredHeight + ImGui::GetStyle().ItemSpacing.y)))
+		m_bIsOpen = true;
+	if (!m_bIsSelected)
+		m_bIsOpen = false;
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 	draw_list->AddImage(
 		(ImTextureID)(intptr_t)m_uiTextureId,
-		ImVec2(pos.x + offset.x, pos.y + offset.y),
-		ImVec2(pos.x + size.x + offset.x, pos.y + size.y + offset.y),
-		ImVec2(0, 0),
-		ImVec2(1, 1)
+		ImVec2(imgPos.x, imgPos.y),
+		ImVec2(imgPos.x + imgSize.x, imgPos.y + imgSize.y),
+		ImVec2(0,0),
+		ImVec2(1,1)
 	);
-
-	// Draw selectable on top of the image
-	ImGui::SetCursorScreenPos(pos);
-	if (ImGui::Selectable("##", &m_bIsSelected, 0, selectableSize))
-	{
-		m_bIsOpen = true;
-	}
-
-	if(!m_bIsSelected)
-	{
-		m_bIsOpen = false;
-	}
-
+	draw_list->AddText(
+		ImVec2(pos.x, pos.y + sizing),
+		IM_COL32(255, 255, 255, 255),
+		m_pcName
+	);
+	draw_list->AddRect(pos, ImVec2(pos.x + sizing, pos.y + sizing + textHeight), IM_COL32(128, 128, 128, 64));
+	ImGui::EndChild();
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("%s", m_pcName);
 	ImGui::PopID();
+
 	if (m_bIsOpen)
 	{
 		std::string name = "Texture Info##" + std::to_string(m_uiTextureId);
 		ImGui::Begin(name.c_str(), &m_bIsOpen,  ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 		//ImGui::BeginChild(name.c_str());
-		ImGui::Text("Texture Name: %s", m_pcName);
-		ImGui::Text("Texture ID: %d", m_uiTextureId);
-		ImGui::Text("Texture Size: %d by %d", m_iWidth, m_iHeight);
+		ImGui::Text("Name: %s", m_pcName);
+		ImGui::Text("ID: %d", m_uiTextureId);
+		ImGui::Text("Size: %d by %d", m_iWidth, m_iHeight);
+		ImGui::Text("Animated: %s", m_bAnimated ? "Yes" : "No");
 		ImGui::Image((ImTextureID)(intptr_t)m_uiTextureId, { static_cast<float>(m_iWidth), static_cast<float>(m_iHeight) });
-		ImGui::EndChild();
+		ImGui::End();
 	} 
 	else
 	{

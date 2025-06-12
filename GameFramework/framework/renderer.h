@@ -46,6 +46,7 @@ public:
 	//void DrawSprite(Sprite& sprite);
 	void DrawSprite(Sprite& sprite, Camera* pCamera = nullptr);
 	void DrawUI(Sprite& sprite);
+	void DrawOutline(Sprite& sprite, Camera* pCamera = nullptr);
 	AnimatedSprite* CreateAnimatedSprite(const char* pcFilename);
 	void DrawAnimatedSprite(AnimatedSprite& sprite, int frame);
 	void DrawTest();
@@ -68,6 +69,9 @@ public:
 
 	TextureManager* GetTextureManager() const { return m_pTextureManager; }
 	//Camera* GetCamera() { return m_pCamera; }
+	
+	bool ReloadShaders();
+
 protected:
 	bool InitializeOpenGL(int screenWidth, int screenHeight);
 	void SetFullscreen(bool fullscreen);
@@ -94,6 +98,8 @@ protected:
 
 	Shader* m_pGridShader;
 	VertexArray* m_pGridVertexData;
+
+	Shader* m_pOutlineShader;
 
 	std::vector<float> m_fLineData;
 

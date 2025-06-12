@@ -25,8 +25,6 @@ public:
 	std::vector<std::string> GetLoadedTextureKeys() const { return m_TextureKeys; }
 
 	void DebugDraw();
-	void SelectTextureDebugDraw();
-	void ToggleSelectTexture();
 protected:
 
 private:
@@ -38,9 +36,9 @@ public:
 
 protected:
 	std::map<std::string, Texture*> m_pLoadedTextures;
+	std::map<std::string, bool> m_AnitmatedTexture;
 	std::vector<std::string> m_TextureKeys;
 private:
-	bool m_bShowSelect;
 };
 
 #endif // __TEXTUREMANAGER_H_

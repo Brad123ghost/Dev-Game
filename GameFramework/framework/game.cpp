@@ -50,7 +50,7 @@ Game::Game()
 	, m_pZapPow{0}
 	, m_bShowSplash(true)
 	, m_bShowDebugHelp(false)
-	, m_bShowAssetBrowser(false)
+	, m_bShowAssetBrowser(true)
 	, m_bShowEntityManager(true)
 	, m_bShowFPS(false)
 	, m_bShowMode(false)
@@ -314,6 +314,8 @@ void Game::Process(float deltaTime)
 	{
 		m_bShowFPS = !m_bShowFPS;
 	}
+	if (m_pInputSystem->GetKeyState(SDL_SCANCODE_LSHIFT) == BS_HELD && m_pInputSystem->GetKeyState(SDL_SCANCODE_R) == BS_PRESSED)
+		m_pRenderer->ReloadShaders();
 	ProcessFrameCounting(deltaTime);
 	if (StateManager::GetInstance().GetState() != GameState::STATE_RESET)
 	{
@@ -554,16 +556,10 @@ void Game::DebugDraw()
 			//}
 			if (ImGui::BeginTabItem("Debug##test"))
 			{
+				ImGui::SeparatorText("Shaders");
+				if (ImGui::Button("Reload Shaders"))
+					m_pRenderer->ReloadShaders();
 				m_scenes[m_iCurrentScene]->DebugDraw();
-				//ImGui::SeparatorText("Grid");
-				//ImGui::Checkbox("Show Grid", &m_bShowGrid);
-				//if(m_bShowGrid)
-				//{
-				//	ImGui::SliderInt("Grid Size", &x, 1, 500, "%d");
-				//	ImGui::SliderInt("Grid Size", &y, 1, 100, "%d");
-				//	/*ImGui::SliderFloat ("X", &x, -2, 2, "%f");
-				//	ImGui::SliderFloat("Y", &y, -2, 2, "%f");*/
-				//}
 				ImGui::SeparatorText("Version");
 				ImGui::Checkbox("Show Version", &m_bShowMode);
 				ImGui::SeparatorText("FPS");

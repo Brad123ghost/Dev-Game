@@ -276,6 +276,9 @@
     <ClCompile Include="entitymanager.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="animator.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -641,6 +644,9 @@
     <ClInclude Include="sprocessinput.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="animator.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="debughelper.h">
@@ -656,6 +662,15 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="..\..\Game\shaders\sprite.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\outline.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\outline.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\..\Game\shaders\outline.geom">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

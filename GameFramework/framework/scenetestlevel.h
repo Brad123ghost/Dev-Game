@@ -11,6 +11,7 @@ class SoundSystem;
 class Sprite;
 class Camera;
 class Texture;
+class AnimatedSprite;
 
 class SceneTestLevel : public Scene
 {
@@ -42,6 +43,9 @@ private:
 	int gridSize;
 	int cellSize;
 	EntityManager m_entityManager;
+
+	AnimatedSprite* m_pWalkLeft;
+	AnimatedSprite* m_pWalkRight;
 };
 
 #endif // __SCENETESTLEVEL_H_

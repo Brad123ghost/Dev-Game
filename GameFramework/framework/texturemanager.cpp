@@ -13,7 +13,6 @@
 #include <SDL.h>
 #include <iostream>
 TextureManager::TextureManager()
-	: m_bShowSelect(false)
 {
 
 }
@@ -72,55 +71,29 @@ void TextureManager::AddTexture(const char* key, Texture* pTexture)
 
 void TextureManager::DebugDraw()
 {
-	ImGui::Text("TextureManager");
-	
+	ImGui::Text("Texture Manager");
 	ImGui::Text("Stores %d textures", m_pLoadedTextures.size());
 
 	std::map<std::string, Texture*>::iterator iter = m_pLoadedTextures.begin();
-	
+	const float sizing = 100.f;
 	float windowWidth = ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvail().x;
 	size_t count = 0;
+	ImVec2 oldSpacing = ImGui::GetStyle().ItemSpacing;
+	ImGui::GetStyle().ItemSpacing = ImVec2(10, 10);
 	while (iter != m_pLoadedTextures.end())
 	{
 		Texture* pTexture = iter->second;
-		pTexture->DebugDraw();
+		pTexture->DebugDraw(sizing);
 		ImGuiStyle& style = ImGui::GetStyle();
 		float lastTexture = ImGui::GetItemRectMax().x;
-		float nextTexture = lastTexture + style.ItemSpacing.x +50; // 50 is texture thumbnail width
-	
+		float nextTexture = lastTexture + style.ItemSpacing.x + sizing;
+		
 		if (count + 1 < m_pLoadedTextures.size() && nextTexture < windowWidth)
 			ImGui::SameLine();
+		else
+			ImGui::Dummy(ImVec2(0, 0));
 		++iter;
 		count++;
 	}
-}
-
-void TextureManager::SelectTextureDebugDraw()
-{
-	if (m_bShowSelect)
-	{
-		std::map<std::string, Texture*>::iterator iter = m_pLoadedTextures.begin();
-		ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
-		ImGui::Begin("Replace Texture", &m_bShowSelect);
-		ImGui::Text("Select texture window");
-		float windowWidth = ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvail().x;
-		size_t count = 0;
-		for (std::string e : m_TextureKeys)
-		{
-			Texture* pTexture = m_pLoadedTextures[e];
-			pTexture->DebugDraw();
-			ImGuiStyle& style = ImGui::GetStyle();
-			float lastTexture = ImGui::GetItemRectMax().x;
-			float nextTexture = lastTexture + style.ItemSpacing.x + 50; // 50 is texture thumbnail width
-
-			if (count + 1 < m_pLoadedTextures.size() && nextTexture < windowWidth)
-				ImGui::SameLine();
-			count++;
-		}
-		ImGui::End();
-	}
-}
-void TextureManager::ToggleSelectTexture()
-{
-	m_bShowSelect = !m_bShowSelect;
+	ImGui::GetStyle().ItemSpacing = oldSpacing;
 }

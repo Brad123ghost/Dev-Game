@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp" />
     <ClCompile Include="alieninvader.cpp" />
     <ClCompile Include="animatedsprite.cpp" />
+    <ClCompile Include="animator.cpp" />
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Camera2D.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="..\..\lib\imgui\imstb_truetype.h" />
     <ClInclude Include="alieninvader.h" />
     <ClInclude Include="animatedsprite.h" />
+    <ClInclude Include="animator.h" />
     <ClInclude Include="ball.h" />
     <ClInclude Include="basecomponent.h" />
     <ClInclude Include="camera.h" />
@@ -349,6 +351,9 @@
   <ItemGroup>
     <None Include="..\..\Game\shaders\line.frag" />
     <None Include="..\..\Game\shaders\line.vert" />
+    <None Include="..\..\Game\shaders\outline.frag" />
+    <None Include="..\..\Game\shaders\outline.geom" />
+    <None Include="..\..\Game\shaders\outline.vert" />
     <None Include="..\..\Game\shaders\sprite.frag" />
     <None Include="..\..\Game\shaders\sprite.vert" />
     <None Include="debughelper.h" />

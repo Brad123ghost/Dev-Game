@@ -26,11 +26,13 @@ Shader::~Shader()
 	Unload();
 }
 
-bool Shader::Load(const char* vertexFile, const char* pixelFile)
+bool Shader::Load(const char* vertexFile, const char* pixelFile, const char* geomFile)
 {
 	bool vertexCompiled = CompileShader(vertexFile, GL_VERTEX_SHADER, m_vertexShader);
 	bool pixelCompiled = CompileShader(pixelFile, GL_FRAGMENT_SHADER, m_pixelShader);
-
+	if (geomFile[0] != '\0')
+		CompileShader(geomFile, GL_GEOMETRY_SHADER, m_geometryShader);
+		
 	if (vertexCompiled == false || pixelCompiled == false)
 	{
 		LogManager::GetInstance().Log("[Shaders] Failed to compile!");
@@ -42,6 +44,8 @@ bool Shader::Load(const char* vertexFile, const char* pixelFile)
 
 	glAttachShader(m_shaderProgram, m_vertexShader);
 	glAttachShader(m_shaderProgram, m_pixelShader);
+	if (geomFile[0] != '\0')
+		glAttachShader(m_shaderProgram, m_geometryShader);
 	glLinkProgram(m_shaderProgram);
 
 	return IsValidProgram();
@@ -64,7 +68,7 @@ void Shader::SetMatrixUniform(const char* name, const Matrix4& matrix)
 {
 	GLuint location = glGetUniformLocation(m_shaderProgram, name);
 
-	glUniformMatrix4fv(location, 1, GL_TRUE, (float*)&matrix);
+	glUniformMatrix4fv(location, 1, GL_FALSE, (float*)&matrix);
 }
 
 void Shader::SetVector4Uniform(const char* name, float x, float y, float z, float w)
@@ -79,6 +83,18 @@ void Shader::SetVector4Uniform(const char* name, float x, float y, float z, floa
 	vec4[3] = w;
 
 	glUniform4fv(location, 1, vec4);
+}
+
+void Shader::SetFloatUniform(const char* name, float value)
+{
+	GLuint location = glGetUniformLocation(m_shaderProgram, name);
+	glUniform1f(location, value);
+}
+
+void Shader::SetIntUniform(const char* name, int value)
+{
+	GLuint location = glGetUniformLocation(m_shaderProgram, name);
+	glUniform1i(location, value);
 }
 
 bool Shader::CompileShader(const char* filename, GLenum shaderType, GLuint& outShader)

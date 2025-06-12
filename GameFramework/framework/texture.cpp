@@ -219,6 +219,8 @@ void Texture::DebugDraw(float sizing)
 		ImGui::Text("ID: %d", m_uiTextureId);
 		ImGui::Text("Size: %d by %d", m_iWidth, m_iHeight);
 		ImGui::Text("Animated: %s", m_bAnimated ? "Yes" : "No");
+		if (m_bAnimated)
+			ImGui::Text("Frame Size: %d by %d", m_animateInfo.frameWidth, m_animateInfo.frameHeight);
 		ImGui::Image((ImTextureID)(intptr_t)m_uiTextureId, { static_cast<float>(m_iWidth), static_cast<float>(m_iHeight) });
 		ImGui::End();
 	} 

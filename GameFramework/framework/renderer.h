@@ -19,6 +19,9 @@ struct SDL_Window;
 #include <memory>
 #include <vector>
 #include "glm.hpp"
+#include "fontatlas.h"
+
+extern Camera* g_pDefaultCamera;
 
 class Renderer
 {
@@ -42,15 +45,18 @@ public:
 	Texture* CreateTexture(const char* pcFilename);
 	//void DrawSprite(Sprite& sprite);
 	void DrawSprite(Sprite& sprite, Camera* pCamera = nullptr);
+	void DrawUI(Sprite& sprite);
+	void DrawOutline(Sprite& sprite, Camera* pCamera = nullptr);
 	AnimatedSprite* CreateAnimatedSprite(const char* pcFilename);
 	void DrawAnimatedSprite(AnimatedSprite& sprite, int frame);
 	void DrawTest();
 	void CreateStaticText(const char* pText, int pointsize);
+	void DrawText(const char* pText, float x, float y, float scale, const glm::vec4& color = glm::vec4(1.f));
 	//void CreateDynamicText(const char* pText, int pointsize, int x, int y);
 
 	void DrawAABB(float x, float y, float width, float height);
 
-	Camera& GetDefaultCamera() { return *m_pDefaultCamera; }
+	Camera& GetDefaultCamera() { return *g_pDefaultCamera; }
 
 	void DrawDebug();
 
@@ -59,7 +65,13 @@ public:
 	void DrawLineFlush(Camera* pCamera);
 	void GenerateGrid(int gSize, int cSize);
 
+	SDL_Window* GetWindow() const { return m_pWindow; }
+
+	TextureManager* GetTextureManager() const { return m_pTextureManager; }
 	//Camera* GetCamera() { return m_pCamera; }
+	
+	bool ReloadShaders();
+
 protected:
 	bool InitializeOpenGL(int screenWidth, int screenHeight);
 	void SetFullscreen(bool fullscreen);
@@ -76,6 +88,7 @@ private:
 public:
 
 protected:
+	FontAtlas* m_pFontAtlas;
 	TextureManager* m_pTextureManager;
 	SDL_Window* m_pWindow;
 	SDL_GLContext m_glContext;
@@ -85,6 +98,8 @@ protected:
 
 	Shader* m_pGridShader;
 	VertexArray* m_pGridVertexData;
+
+	Shader* m_pOutlineShader;
 
 	std::vector<float> m_fLineData;
 
@@ -99,8 +114,6 @@ protected:
 
 private:
 	float m_gridSize;
-	Camera* m_pDefaultCamera;
-
 };
 
 #endif // __RENDERER_H_

@@ -25,6 +25,8 @@ public:
 	void Quit();
 	void ToggleDebugWindow();
 	bool IsDebugVisible();
+	Renderer& GetRenderer() const { return *m_pRenderer; };
+	InputSystem& GetInputSystem() const { return *m_pInputSystem; };
 protected:
 	void Process(float deltaTime);
 	void Draw(Renderer& renderer);
@@ -83,6 +85,7 @@ protected:
 private:
 	bool m_bShowDebugHelp;
 	bool m_bShowAssetBrowser;
+	bool m_bShowEntityManager;
 	bool m_bShowFPS;
 	bool m_bShowMode;
 	std::string m_sMode;

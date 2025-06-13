@@ -110,4 +110,22 @@ inline Vector2 CamScreenToWorld(Vector2 screenPos, const Camera& cam)  {
 	worldPos.y = -(((screenPos.y - cam.GetViewportSize().y / 2.0f) / cam.GetZoom()) + cam.GetPosition().y);
 	return worldPos;
 }
+
+extern Camera* g_pDefaultCamera;
+
+inline Vector2 v2WorldToScreen(Vector2 worldPos)
+{
+	Vector2 screenPos;
+	screenPos.x = worldPos.x + (g_pDefaultCamera->GetViewportSize().x / 2.0f);
+	screenPos.y = worldPos.y + (g_pDefaultCamera->GetViewportSize().y / 2.0f);
+	return screenPos;
+}
+
+inline Vector2 v2ScreenToWorld(Vector2 screenPos)
+{
+	Vector2 worldPos;
+	worldPos.x = screenPos.x - (g_pDefaultCamera->GetViewportSize().x / 2.0f);
+	worldPos.y = -screenPos.x - (g_pDefaultCamera->GetViewportSize().x / 2.0f);
+	return worldPos;
+}
 #endif // __INLINEHELPERS_H_

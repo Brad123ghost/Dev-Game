@@ -11,6 +11,7 @@ DynamicText::DynamicText(const char* fontName, int pointSize, int x, int y)
 	TTF_Init();
 	m_pFont = TTF_OpenFont(m_pcFontName, m_iPointSize);
 	assert(m_pFont != nullptr);
+	TTF_Quit();
 }
 
 DynamicText::~DynamicText()
@@ -18,7 +19,7 @@ DynamicText::~DynamicText()
 	if (m_pFont)
 	{
 		TTF_CloseFont(m_pFont);
-		delete m_pFont;
+		//delete m_pFont;
 		m_pFont = 0;
 	}
 

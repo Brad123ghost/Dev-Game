@@ -3,6 +3,7 @@
 #define __NEWENTITY_H_
 
 #include <memory>
+#include <string>
 
 #include "vector2.h"
 #include "ctransform.h"
@@ -14,9 +15,9 @@ enum class eTag
 {
 	DEFAULT,
 	PLAYER,
-	ETAG_ENEMY,
-	ETAG_PROJECTILE,
-	ETAG_ITEM
+	ENEMY,
+	PROJECTILE,
+	ITEM
 };
 
 //typedef std::tuple<CTransform, CInput, CSprite> Components;
@@ -26,12 +27,13 @@ class NewEntity
 public:
 	friend class EntityManager;
 
-	NewEntity(size_t id, eTag tag = eTag::DEFAULT, ComponentStorage* storage = nullptr);
+	NewEntity(size_t id, std::string name = "Default", eTag tag = eTag::DEFAULT, ComponentStorage* storage = nullptr);
 	~NewEntity();
 
 	void SetDead();
 	bool IsAlive() const;
 	eTag GetTag() const;
+	std::string GetTagString() const;
 	size_t GetId() const;
 
 
@@ -61,6 +63,7 @@ public:
 	}
 
 private:
+	std::string m_strName;
 	bool m_bAlive;
 	eTag m_eTag;
 	size_t m_iId = 0;

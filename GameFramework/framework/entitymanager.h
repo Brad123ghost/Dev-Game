@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <string>
 
 typedef std::vector<std::shared_ptr<NewEntity>> EntityVec;
 typedef std::map<eTag, EntityVec> EntityMap;
@@ -19,7 +20,7 @@ public:
 
 	void Update();
 
-	std::shared_ptr<NewEntity> CreateEntity(const eTag tag);
+	std::shared_ptr<NewEntity> CreateEntity(std::string name, const eTag tag);
 
 	EntityVec& GetEntities();
 	EntityVec& GetEntities(const eTag tag);

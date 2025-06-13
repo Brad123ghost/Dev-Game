@@ -395,7 +395,7 @@ void SceneSpaceInvaders::Draw(Renderer& renderer)
 	{*/
 
 	//}
-	/*tempback->Draw(renderer, m_pPlayerCamera);
+	tempback->Draw(renderer, m_pPlayerCamera);
 	tempback2->Draw(renderer, m_pPlayerCamera);
 	tempback3->Draw(renderer, m_pPlayerCamera);
 	m_pBackground->Draw(renderer, m_pPlayerCamera);
@@ -413,15 +413,15 @@ void SceneSpaceInvaders::Draw(Renderer& renderer)
 		{
 			(*iter)->Draw(renderer, m_pPlayerCamera);
 		}
-	}*/
+	}
 	//m_pText->Draw(renderer);
 	//renderer.DrawLine2D({ 0,0 }, { 0,0.5 });
-	renderer.DrawLine2D({1,0}, {1,0.5});
-	renderer.DrawLine2D({1,1}, {1,1});
+	/*renderer.DrawLine2D({1,0}, {1,0.5});
+	renderer.DrawLine2D({1,1}, {1,1});*/
 	/*renderer.DrawLine2D({ 0.5,0 }, { 0.5,0.5 });
 	renderer.DrawLine2D({ 0,0 }, { 0.5,0 });
 	renderer.DrawLine2D({ 0,0.5 }, { 0.5,0.5 });*/
-	renderer.DrawLineFlush(m_pPlayerCamera);
+	//renderer.DrawLineFlush(m_pPlayerCamera);
 }
 
 void SceneSpaceInvaders::SceneInfoDraw()
@@ -497,7 +497,7 @@ void SceneSpaceInvaders::DebugDraw()
 				activeCam->ResetCamera();
 			}
 			
-			struct dump
+			/*struct dump
 			{
 				int x;
 				int y;
@@ -512,7 +512,7 @@ void SceneSpaceInvaders::DebugDraw()
 			if (ImGui::SliderInt("Camera Y", &tempDump.y, -m_iMaxHeight, m_iMaxHeight))
 			{
 				activeCam->SetPosition(0, tempDump.y);
-			}
+			}*/
 		}
 	}
 	if (ImGui::CollapsingHeader("Player Settings"))

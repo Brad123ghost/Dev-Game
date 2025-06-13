@@ -52,7 +52,7 @@ Texture* TextureManager::GetTexture(const char* pcFilename)
 			LogManager::GetInstance().Log("[Texture Manager] Texture failed to initialize!");
 			assert(0);
 		}
-
+		m_TextureKeys.push_back(pcFilename);
 		m_pLoadedTextures[pcFilename] = pTexture;
 	}
 	else
@@ -71,28 +71,29 @@ void TextureManager::AddTexture(const char* key, Texture* pTexture)
 
 void TextureManager::DebugDraw()
 {
-	ImGui::Text("TextureManager");
-	
+	ImGui::Text("Texture Manager");
 	ImGui::Text("Stores %d textures", m_pLoadedTextures.size());
 
 	std::map<std::string, Texture*>::iterator iter = m_pLoadedTextures.begin();
-	
+	const float sizing = 100.f;
 	float windowWidth = ImGui::GetCursorScreenPos().x + ImGui::GetContentRegionAvail().x;
 	size_t count = 0;
+	ImVec2 oldSpacing = ImGui::GetStyle().ItemSpacing;
+	ImGui::GetStyle().ItemSpacing = ImVec2(10, 10);
 	while (iter != m_pLoadedTextures.end())
 	{
 		Texture* pTexture = iter->second;
-		pTexture->DebugDraw();
+		pTexture->DebugDraw(sizing);
 		ImGuiStyle& style = ImGui::GetStyle();
 		float lastTexture = ImGui::GetItemRectMax().x;
-		float nextTexture = lastTexture + style.ItemSpacing.x +50; // 50 is texture thumbnail width
-	
+		float nextTexture = lastTexture + style.ItemSpacing.x + sizing;
+		
 		if (count + 1 < m_pLoadedTextures.size() && nextTexture < windowWidth)
 			ImGui::SameLine();
+		else
+			ImGui::Dummy(ImVec2(0, 0));
 		++iter;
 		count++;
 	}
-	
-	
-
+	ImGui::GetStyle().ItemSpacing = oldSpacing;
 }

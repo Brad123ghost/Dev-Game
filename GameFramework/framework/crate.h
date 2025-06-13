@@ -7,7 +7,7 @@ class b2World;
 class Sprite;
 class b2Fixture;
 class b2Body;
-class b2BodyDef;
+struct b2BodyDef;
 
 class Crate {
 public:

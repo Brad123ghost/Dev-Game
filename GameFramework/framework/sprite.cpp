@@ -10,12 +10,14 @@ Sprite::Sprite()
 	: m_pTexture(0)
 	, m_x(0)
 	, m_y(0)
+	, m_vWorldPos(0.0f, 0.0f)
 	, m_width(0)
 	, m_height(0)
 	, m_angle(0.0f)
 	, m_centerX(0)
 	, m_centerY(0)
-	, m_scale(1.0f)
+	, m_xScale(1.0f)
+	, m_yScale(1.0f)
 	, m_alpha(1.0f)
 	, m_tintRed(1.0f)
 	, m_tintGreen(1.0f)
@@ -40,15 +42,37 @@ bool Sprite::Initialize(Texture& texture)
 	return true;
 }
 
+void Sprite::ReplaceTexture(Texture& texture)
+{
+	if (m_pTexture != &texture)
+	{
+		m_pTexture = &texture;
+		m_width = m_pTexture->GetWidth();
+		m_height = m_pTexture->GetHeight();
+		m_centerX = m_width / 2.0f;
+		m_centerY = m_height / 2.0f;
+	}
+}
+
 void Sprite::Process(float deltaTime)
 {
 
 }
 
-void Sprite::Draw(Renderer& renderer, Camera* camera)
+void Sprite::Draw(Renderer& renderer, DrawMode mode)
+{
+	Draw(renderer, nullptr, mode);
+}
+
+void Sprite::Draw(Renderer& renderer, Camera* camera, DrawMode mode)
 {
 	m_pTexture->SetActive();
-	renderer.DrawSprite(*this, camera);
+	if(mode == WORLD)
+		renderer.DrawSprite(*this, camera);
+	else if (mode == SCREEN)
+		renderer.DrawUI(*this);
+	else if (mode == OUTLINE)
+		renderer.DrawOutline(*this, camera);
 }
 
 void Sprite::SetX(int x)
@@ -100,14 +124,30 @@ float Sprite::GetAngle() const
 	return m_angle;
 }
 
-void Sprite::SetScale(float scale)
+void Sprite::SetScale(Vector2 scale) const
 {
-	m_scale = scale;
+	scale.x = m_xScale;
+	scale.y = m_yScale;
 }
 
-float Sprite::GetScale() const
+void Sprite::SetScale(float scale)
 {
-	return m_scale;
+	m_xScale = scale;
+	m_yScale = scale;
+}
+
+void Sprite::SetXScale(float scale)
+{
+	m_xScale = scale;
+}
+void Sprite::SetYScale(float scale)
+{
+	m_yScale = scale;
+}
+
+Vector2 Sprite::GetScale() const
+{
+	return {m_xScale, m_yScale};
 }
 
 void Sprite::SetAlpha(float alpha)
@@ -122,12 +162,12 @@ float Sprite::GetAlpha() const
 
 int Sprite::GetWidth() const
 {
-	return static_cast<int>(ceilf(m_width * m_scale));
+	return static_cast<int>(ceilf(m_width * m_xScale));
 }
 
 int Sprite::GetHeight() const
 {
-	return static_cast<int>(ceilf(m_height * m_scale));
+	return static_cast<int>(ceilf(m_height * m_yScale));
 }
 
 float Sprite::Clamp(float minimum, float value, float maximum)
@@ -177,4 +217,18 @@ float Sprite::GetBlueTint() const
 Texture* Sprite::GetTexture() const
 {
 	return m_pTexture;
+}
+
+unsigned int Sprite::GetTextureId() const
+{
+	return m_pTexture->GetTextureId();
+}
+
+const char* Sprite::GetTexturePath() const
+{
+	if (m_pTexture)
+	{
+		return m_pTexture->GetPath();
+	}
+	return nullptr;
 }

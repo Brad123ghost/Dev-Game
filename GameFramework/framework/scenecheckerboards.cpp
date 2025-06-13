@@ -99,8 +99,9 @@ void SceneCheckerboards::DebugDraw()
 
 	ImGui::InputFloat("Rotation speed", &m_rotationSpeed);
 
-	float scale = m_pCenter->GetScale();
-	ImGui::SliderFloat("Demo scale", &scale, 0.0f, 2.0f, "%.3f");
+	Vector2 scale = m_pCenter->GetScale();
+	ImGui::SliderFloat("Demo scale X", &scale.x, 0.0f, 2.0f, "%.3f");
+	ImGui::SliderFloat("Demo scale Y", &scale.y, 0.0f, 2.0f, "%.3f");
 	m_pCenter->SetScale(scale);
 
 	int position[2];

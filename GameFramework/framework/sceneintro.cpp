@@ -51,7 +51,7 @@ void SceneIntro::Process(float deltaTime, InputSystem& inputSystem)
 
 void SceneIntro::Draw(Renderer& renderer)
 {
-	m_pLogoSprite->Draw(renderer);
+	m_pLogoSprite->Draw(renderer, SCREEN);
 }
 
 

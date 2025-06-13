@@ -10,6 +10,9 @@ class InputSystem;
 class SoundSystem;
 class Sprite;
 class Camera;
+class Texture;
+class AnimatedSprite;
+class Animator;
 
 class SceneTestLevel : public Scene
 {
@@ -18,11 +21,14 @@ public:
 	virtual ~SceneTestLevel();
 
 	virtual bool Initialize(Renderer& renderer, SoundSystem& soundSystem);
+	void replaceTexture(std::shared_ptr<Sprite> sprite, const char* texturePath);
 	virtual void Process(float deltaTime, InputSystem& inputSystem);
 	virtual void Draw(Renderer& renderer);
 
 	virtual void SceneInfoDraw();
 	virtual void DebugDraw();
+	virtual void EntityManagerDebugDraw(bool& open);
+
 private:
 	SceneTestLevel(const SceneTestLevel& sceneTestLevel);
 	SceneTestLevel& operator=(const SceneTestLevel& sceneTestLevel);
@@ -31,14 +37,17 @@ private:
 protected:
 	Sprite* m_pTestSprite;
 	Camera* m_pCamera;
-
+	Renderer* m_pRenderer;
 private:
 	bool m_bShowGrid;
 	bool m_bDrawAABB;
 	int gridSize;
 	int cellSize;
+	EntityManager m_entityManager;
 
-	EntityManager m_pEntityManager;
+	AnimatedSprite* m_pWalkLeft;
+	AnimatedSprite* m_pWalkRight;
+	Animator* m_pAnimator;
 };
 
 #endif // __SCENETESTLEVEL_H_

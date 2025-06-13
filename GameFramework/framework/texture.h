@@ -2,7 +2,13 @@
 #ifndef __TEXTURE_H_
 #define __TEXTURE_H_
 
-class SDL_Surface;
+struct SDL_Surface;
+
+struct AnimateInfo
+{
+	int frameWidth;
+	int frameHeight;
+};
 
 class Texture
 {
@@ -14,14 +20,18 @@ public:
 	bool Initialize(const char* pcFilename);
 
 	void SetActive();
-
+	void SetAnimated() { m_bAnimated = true; }
+	bool IsAnimated() const { return m_bAnimated; }
+	void SetAnimateInfo(const AnimateInfo& animateInfo) { m_animateInfo = animateInfo; }
 	int GetWidth() const;
 	int GetHeight() const;
-
+	unsigned int GetTextureId() const { return m_uiTextureId; }
+	const char* GetPath() const { return m_pcName; }
 	void LoadTextTexture(const char* text, const char* fontname, int pointsize);
+	void LoadFontAtlas(const char* text, SDL_Surface* pSurface);
 	void LoadSurfaceIntoTexture(SDL_Surface* pSurface);
 
-	void DebugDraw();
+	void DebugDraw(float sizing);
 protected:
 
 private:
@@ -38,6 +48,8 @@ protected:
 	const char* m_pcName;
 	bool m_bIsSelected;
 	bool m_bIsOpen;
+	bool m_bAnimated;
+	AnimateInfo m_animateInfo;
 private:
 
 };

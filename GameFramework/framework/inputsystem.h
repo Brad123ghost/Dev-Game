@@ -67,6 +67,7 @@ protected:
 
 	XboxController* m_pXboxController;
 	int m_iNumAttachedControllers;
+	int m_iNumJoySticks;
 
 private:
 	bool m_bDebugMode;

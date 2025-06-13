@@ -40,12 +40,12 @@ bool AnimatedSprite::Initialize(Texture& texture)
 
 int AnimatedSprite::GetWidth() const
 {
-	return static_cast<int>(ceilf(m_iFrameWidth * m_scale));
+	return static_cast<int>(ceilf(m_iFrameWidth * m_xScale));
 }
 
 int AnimatedSprite::GetHeight() const
 {
-	return static_cast<int>(ceilf(m_iFrameHeight * m_scale));
+	return static_cast<int>(ceilf(m_iFrameHeight * m_yScale));
 }
 
 bool AnimatedSprite::IsAnimating() const
@@ -57,7 +57,7 @@ void AnimatedSprite::SetupFrames(int fixedFrameWidth, int fixedFrameHeight)
 {
 	m_iFrameWidth = fixedFrameWidth;
 	m_iFrameHeight = fixedFrameHeight;
-
+	m_pTexture->SetAnimateInfo({ fixedFrameWidth, fixedFrameHeight });
 	const int textureWidth = m_pTexture->GetWidth();
 	const int textureHeight = m_pTexture->GetHeight();
 	const int totalFramesWide = textureWidth / fixedFrameWidth;
@@ -118,10 +118,10 @@ void AnimatedSprite::SetupFrames(int fixedFrameWidth, int fixedFrameHeight)
 
 	m_pVertexData = new VertexArray(vertices, numVertices, allIndices, totalIndices, 5);
 
-	delete vertices;
+	delete[] vertices;
 	vertices = 0;
 
-	delete allIndices;
+	delete[] allIndices;
 	allIndices = 0;
 }
 

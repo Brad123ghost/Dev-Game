@@ -50,7 +50,8 @@ Game::Game()
 	, m_pZapPow{0}
 	, m_bShowSplash(true)
 	, m_bShowDebugHelp(false)
-	, m_bShowAssetBrowser(false)
+	, m_bShowAssetBrowser(true)
+	, m_bShowEntityManager(true)
 	, m_bShowFPS(false)
 	, m_bShowMode(false)
 	//, x(500)
@@ -313,6 +314,8 @@ void Game::Process(float deltaTime)
 	{
 		m_bShowFPS = !m_bShowFPS;
 	}
+	if (m_pInputSystem->GetKeyState(SDL_SCANCODE_LSHIFT) == BS_HELD && m_pInputSystem->GetKeyState(SDL_SCANCODE_R) == BS_PRESSED)
+		m_pRenderer->ReloadShaders();
 	ProcessFrameCounting(deltaTime);
 	if (StateManager::GetInstance().GetState() != GameState::STATE_RESET)
 	{
@@ -427,25 +430,45 @@ void Game::ProcessFrameCounting(float deltaTime)
 
 void Game::DebugDraw()
 {
+	
+	// Main dockspace
+	/*ImGui::Begin("Main Dockspace", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBackground);
+	ImGuiID dockspaceID = ImGui::GetID("MainDockspace");
+	ImGui::DockSpace(dockspaceID, ImVec2(0, 0), ImGuiDockNodeFlags_None);
+	ImGui::End();*/
+
+
 	if (m_bShowMode)
 	{
+		/*ImGui::SetNextWindowDockID(ImGui::GetMainViewport()->ID, ImGuiCond_Always);*/
+		//ImGui::SetNextWindowPos(vp->WorkPos, ImGuiCond_Always);
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("Release Version", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
 		ImGui::Text("%s Build", m_sMode.c_str());
 		float height = ImGui::GetWindowSize().y;
-		ImGui::SetWindowPos(ImVec2(0, ImGui::GetIO().DisplaySize.y - height), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(vp->WorkPos.x, vp->WorkPos.y + (vp->Size.y - height)), ImGuiCond_Always);
 		ImGui::End();
 	}
 	// FPS Counter using ImGui 
 	if (m_bShowFPS)
 	{
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("FPS Counter", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav); // No title bar, no resize, no move, always auto-resize, no saved settings, no focus on appearing, no nav
 		ImGui::Text("%.2f ms  FPS: %d", m_fLastFrameTime, m_iFPS);
 		float width = ImGui::GetWindowSize().x;
-		ImGui::SetWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - width, 0), ImGuiCond_Always);
+		ImGui::SetWindowPos(ImVec2(vp->WorkPos.x + ImGui::GetIO().DisplaySize.x - width, vp->WorkPos.y), ImGuiCond_Always);
 		ImGui::End();
 	}
 	if (m_ShowDebugWindow)
 	{
+		if (m_bShowEntityManager && StateManager::GetInstance().GetState() == GameState::STATE_TEST_LEVEL)
+		{
+			SceneTestLevel* testLevel = static_cast<SceneTestLevel*>(m_scenes[m_iCurrentScene]);
+			testLevel->EntityManagerDebugDraw(m_bShowEntityManager);
+		}
+
 		if (m_bShowAssetBrowser)
 		{
 			ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
@@ -466,7 +489,10 @@ void Game::DebugDraw()
 		}
 
 		// Debug mode watermark
-		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+		//ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(vp->WorkPos, ImGuiCond_Always);
+		ImGui::SetNextWindowViewport(vp->ID);
 		ImGui::Begin("Watermark", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav); // No title bar, no resize, no move, always auto-resize, no saved settings, no focus on appearing, no nav
 		ImGui::Text("Debug Activated");
 		ImGui::End();
@@ -479,6 +505,10 @@ void Game::DebugDraw()
 				ImGui::MenuItem("Asset Browser", NULL, &m_bShowAssetBrowser);
 				/*ImGui::SeparatorText("Frames");
 				ImGui::MenuItem("Show FPS", NULL, &showFPS);*/
+
+				ImGui::MenuItem("Scene Entity Manager", NULL, &m_bShowEntityManager);
+				
+				
 				ImGui::EndMenu();
 			}
 			ImGui::MenuItem("Help", NULL, &m_bShowDebugHelp);
@@ -526,16 +556,10 @@ void Game::DebugDraw()
 			//}
 			if (ImGui::BeginTabItem("Debug##test"))
 			{
+				ImGui::SeparatorText("Shaders");
+				if (ImGui::Button("Reload Shaders"))
+					m_pRenderer->ReloadShaders();
 				m_scenes[m_iCurrentScene]->DebugDraw();
-				//ImGui::SeparatorText("Grid");
-				//ImGui::Checkbox("Show Grid", &m_bShowGrid);
-				//if(m_bShowGrid)
-				//{
-				//	ImGui::SliderInt("Grid Size", &x, 1, 500, "%d");
-				//	ImGui::SliderInt("Grid Size", &y, 1, 100, "%d");
-				//	/*ImGui::SliderFloat ("X", &x, -2, 2, "%f");
-				//	ImGui::SliderFloat("Y", &y, -2, 2, "%f");*/
-				//}
 				ImGui::SeparatorText("Version");
 				ImGui::Checkbox("Show Version", &m_bShowMode);
 				ImGui::SeparatorText("FPS");
@@ -584,7 +608,8 @@ void Game::DebugDraw()
 void Game::ToggleDebugWindow()
 {
 	m_ShowDebugWindow = !m_ShowDebugWindow;
-	std::cout << "Debug Pressed" << std::endl;
+	//std::cout << "Debug Pressed" << std::endl;
+	std::cout << m_ShowDebugWindow << std::endl;
 	//m_pInputSystem->ShowMouseCursor(m_ShowDebugWindow);
 }
 

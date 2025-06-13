@@ -31,6 +31,10 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+# Allow box2d
+!lib/box2d/lib/debug
+!lib/box2d/lib/release
+
 # Build EXEs
 *.exe
 

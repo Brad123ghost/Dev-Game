@@ -9,6 +9,8 @@
 #include "texture.h"
 #include "logmanager.h"
 #include "sprocessinput.h"
+#include "animator.h"
+#include "game.h"
 
 SceneTestLevel::SceneTestLevel()
 	: m_bShowGrid(false)
@@ -18,6 +20,7 @@ SceneTestLevel::SceneTestLevel()
 	, gridSize(10)
 	, cellSize(32)
 	, m_pRenderer(0)
+	, m_pAnimator(0)
 {
 }
 
@@ -36,10 +39,136 @@ SceneTestLevel::~SceneTestLevel()
 	delete m_pWalkRight;
 	m_pWalkRight = 0;
 
+	delete m_pAnimator;
+	m_pAnimator = 0;
+
 }
 
 bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 {
+	InputSystem& inputSystem = Game::GetInstance().GetInputSystem();
+
+	m_pAnimator = new Animator();
+	AnimatedSprite* pIdleLeft = renderer.CreateAnimatedSprite("sprites\\idle_left.png");
+	pIdleLeft->SetupFrames(64, 64);
+	pIdleLeft->SetFrameDuration(0.1f);
+	pIdleLeft->SetLooping(true);
+	pIdleLeft->Animate();
+	m_pAnimator->AddAnimation("IdleLeft", pIdleLeft);
+	AnimatedSprite* pIdleRight = renderer.CreateAnimatedSprite("sprites\\idle_right.png");
+	pIdleRight->SetupFrames(64, 64);
+	pIdleRight->SetFrameDuration(0.1f);
+	pIdleRight->SetLooping(true);
+	pIdleRight->Animate();
+	m_pAnimator->AddAnimation("IdleRight", pIdleRight);
+	AnimatedSprite* pWalkLeft = renderer.CreateAnimatedSprite("sprites\\walking_left.png");
+	pWalkLeft->SetupFrames(64, 64);
+	pWalkLeft->SetFrameDuration(0.1f);
+	pWalkLeft->SetLooping(true);
+	pWalkLeft->Animate();
+	m_pAnimator->AddAnimation("WalkLeft", pWalkLeft);
+	AnimatedSprite* pWalkRight = renderer.CreateAnimatedSprite("sprites\\walking_right.png");
+	pWalkRight->SetupFrames(64, 64);
+	pWalkRight->SetFrameDuration(0.1f);
+	pWalkRight->SetLooping(true);
+	pWalkRight->Animate();
+	m_pAnimator->AddAnimation("WalkRight", pWalkRight);
+	AnimatedSprite* pRuninngLeft = renderer.CreateAnimatedSprite("sprites\\running_left.png");
+	pRuninngLeft->SetupFrames(64, 64);
+	pRuninngLeft->SetFrameDuration(0.1f);
+	pRuninngLeft->SetLooping(true);
+	pRuninngLeft->Animate();
+	m_pAnimator->AddAnimation("RunLeft", pRuninngLeft);
+	AnimatedSprite* pRuninngRight = renderer.CreateAnimatedSprite("sprites\\running_right.png");
+	pRuninngRight->SetupFrames(64, 64);
+	pRuninngRight->SetFrameDuration(0.1f);
+	pRuninngRight->SetLooping(true);
+	pRuninngRight->Animate();
+	m_pAnimator->AddAnimation("RunRight", pRuninngRight);
+
+	m_pAnimator->SetDefaultState("Idle");
+	m_pAnimator->SetPosition(300, 300);
+
+	// From State, To State, Return is the condition the animator class is checking
+	
+	m_pAnimator->AddTransition("Idle", "Run", [&inputSystem]() {
+		return (
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT)) ||
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT))
+			);
+		});
+	m_pAnimator->AddTransition("Idle", "Walk", [&inputSystem]() {
+		return inputSystem.GetKeyState(SDL_SCANCODE_LEFT) || inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+		});
+	m_pAnimator->AddTransition("Walk", "Run", [&inputSystem]() {
+		return (
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT)) ||
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT))
+			);
+		});
+	m_pAnimator->AddTransition("Run", "Walk", [&inputSystem]() {
+		return (
+			(!inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT)) ||
+			(!inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT))
+			);
+		});
+	m_pAnimator->AddTransition("Walk", "Idle", [&inputSystem]() {
+		return !inputSystem.GetKeyState(SDL_SCANCODE_LEFT) && !inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+		});
+	m_pAnimator->AddTransition("Run", "Idle", [&inputSystem]() {
+		return (
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && !inputSystem.GetKeyState(SDL_SCANCODE_LEFT)) &&
+			(inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && !inputSystem.GetKeyState(SDL_SCANCODE_RIGHT))
+			);
+		});
+
+
+	// Left Transitions
+	//{
+	//	m_pAnimator->AddTransition("IdleLeft", "RunLeft", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+	//	m_pAnimator->AddTransition("IdleLeft", "WalkLeft", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+
+	//	m_pAnimator->AddTransition("WalkLeft", "RunLeft", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+	//	m_pAnimator->AddTransition("RunLeft", "WalkLeft", [&inputSystem]() {
+	//		return !inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+	//	m_pAnimator->AddTransition("WalkLeft", "IdleLeft", [&inputSystem]() {
+	//		return !inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+	//	m_pAnimator->AddTransition("RunLeft", "IdleLeft", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && !inputSystem.GetKeyState(SDL_SCANCODE_LEFT);
+	//		});
+	//}
+
+	//// Right Transitions
+	//{
+	//	m_pAnimator->AddTransition("IdleRight", "RunRight", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+	//	m_pAnimator->AddTransition("IdleRight", "WalkRight", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+
+	//	m_pAnimator->AddTransition("WalkRight", "RunRight", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+	//	m_pAnimator->AddTransition("RunRight", "WalkRight", [&inputSystem]() {
+	//		return !inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+	//	m_pAnimator->AddTransition("WalkRight", "IdleRight", [&inputSystem]() {
+	//		return !inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+	//	m_pAnimator->AddTransition("RunRight", "IdleRight", [&inputSystem]() {
+	//		return inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT) && !inputSystem.GetKeyState(SDL_SCANCODE_RIGHT);
+	//		});
+	//}
+
 	m_pWalkLeft = renderer.CreateAnimatedSprite("sprites\\walking_left.png");
 	m_pWalkLeft->SetX(100);
 	m_pWalkLeft->SetY(100);
@@ -105,6 +234,7 @@ static int counter = 0;
 static float timer = 0;
 void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 {
+
 	// Process animation temp 
 	if (m_pWalkLeft->IsAnimating())
 	{
@@ -114,6 +244,32 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 	{
 		m_pWalkRight->Process(deltaTime);
 	}
+	// Run
+	//if (inputSystem.GetKeyState(SDL_SCANCODE_LSHIFT))
+	//{
+	//	if (inputSystem.GetKeyState(SDL_SCANCODE_RIGHT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT) == BS_NEUTRAL)
+	//		m_pAnimator->SetActiveState("RunRight");
+	//	if (inputSystem.GetKeyState(SDL_SCANCODE_LEFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT) == BS_NEUTRAL)
+	//		m_pAnimator->SetActiveState("RunLeft");
+	//}
+	//// Walk
+	//else
+	//{
+	//	if (inputSystem.GetKeyState(SDL_SCANCODE_RIGHT) && inputSystem.GetKeyState(SDL_SCANCODE_LEFT) == BS_NEUTRAL)
+	//		m_pAnimator->SetActiveState("WalkRight");
+	//	if (inputSystem.GetKeyState(SDL_SCANCODE_LEFT) && inputSystem.GetKeyState(SDL_SCANCODE_RIGHT) == BS_NEUTRAL)
+	//		m_pAnimator->SetActiveState("WalkLeft");
+	//	if (inputSystem.GetKeyState(SDL_SCANCODE_UP))
+	//		m_pAnimator->SetActiveState("WalkUp");
+
+	//}
+	if (inputSystem.GetKeyState(SDL_SCANCODE_LEFT) && !inputSystem.GetKeyState(SDL_SCANCODE_RIGHT))
+		m_pAnimator->SetFacingLeft();
+	if (inputSystem.GetKeyState(SDL_SCANCODE_RIGHT) && !inputSystem.GetKeyState(SDL_SCANCODE_LEFT))
+		m_pAnimator->SetFacingRight();
+	m_pAnimator->Process(deltaTime);
+
+
 	m_entityManager.Update();
 	m_pCamera->Process(deltaTime, inputSystem);
 	// If has sprite and transform, update sprite position/rot
@@ -172,6 +328,8 @@ void SceneTestLevel::Draw(Renderer& renderer)
 		m_pWalkRight->Draw(renderer);
 	}
 
+	m_pAnimator->Draw(renderer);
+
 	/*std::string title = "Test Level - " + std::to_string(counter);
 	renderer.DrawText(title.c_str(), 10, 10, 1.0f);*/
 	//renderer.DrawLine2D({ 0,0 }, { 0,1 });
@@ -187,7 +345,7 @@ void SceneTestLevel::Draw(Renderer& renderer)
 		renderer.DrawLineFlush(currentCam);
 
 	}
-	m_pTestSprite->Draw(renderer, m_pCamera, OUTLINE);
+	m_pTestSprite->Draw(renderer, m_pCamera);
 
 	// Draw Entities
 	for(auto& e : m_entityManager.GetEntities())
@@ -195,7 +353,7 @@ void SceneTestLevel::Draw(Renderer& renderer)
 		
 		if(e->GetComponent<CSprite>())
 		{
-			e->GetComponent<CSprite>()->GetSprite()->Draw(renderer, currentCam, OUTLINE);
+			e->GetComponent<CSprite>()->GetSprite()->Draw(renderer, currentCam);
 		}
 	}
 
@@ -209,11 +367,11 @@ void SceneTestLevel::SceneInfoDraw()
 {
 	ImGui::Text("Scene: Test Level");
 	DebugHelper::DrawCameraDebug(m_pCamera, &m_entityManager);
+	m_pAnimator->DrawDebug();
 }
 
 void SceneTestLevel::DebugDraw()
 {
-
 	DebugHelper::DrawGridDebug(gridSize, cellSize, m_bShowGrid);
 
 	

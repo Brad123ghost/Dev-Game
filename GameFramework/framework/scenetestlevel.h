@@ -12,6 +12,7 @@ class Sprite;
 class Camera;
 class Texture;
 class AnimatedSprite;
+class Animator;
 
 class SceneTestLevel : public Scene
 {
@@ -46,6 +47,7 @@ private:
 
 	AnimatedSprite* m_pWalkLeft;
 	AnimatedSprite* m_pWalkRight;
+	Animator* m_pAnimator;
 };
 
 #endif // __SCENETESTLEVEL_H_

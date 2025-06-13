@@ -16,6 +16,7 @@
 Shader::Shader()
 	: m_vertexShader(0)
 	, m_pixelShader(0)
+	, m_geometryShader(0)
 	, m_shaderProgram(0)
 {
 
@@ -53,9 +54,26 @@ bool Shader::Load(const char* vertexFile, const char* pixelFile, const char* geo
 
 void Shader::Unload()
 {
-	glDeleteProgram(m_shaderProgram);
-	glDeleteShader(m_vertexShader);
-	glDeleteShader(m_pixelShader);
+	if (m_vertexShader != 0)
+	{
+		glDeleteShader(m_vertexShader);
+		m_vertexShader = 0;
+	}
+	if (m_pixelShader != 0)
+	{
+		glDeleteShader(m_pixelShader);
+		m_pixelShader = 0;
+	}
+	if (m_geometryShader != 0)
+	{
+		glDeleteShader(m_geometryShader);
+		m_geometryShader = 0;
+	}
+	if (m_shaderProgram != 0)
+	{
+		glDeleteProgram(m_shaderProgram);
+		m_shaderProgram = 0;
+	}
 }
 
 void Shader::SetActive()

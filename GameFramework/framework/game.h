@@ -26,7 +26,7 @@ public:
 	void ToggleDebugWindow();
 	bool IsDebugVisible();
 	Renderer& GetRenderer() const { return *m_pRenderer; };
-
+	InputSystem& GetInputSystem() const { return *m_pInputSystem; };
 protected:
 	void Process(float deltaTime);
 	void Draw(Renderer& renderer);

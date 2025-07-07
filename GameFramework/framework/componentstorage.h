@@ -8,7 +8,7 @@
 #include <memory>
 #include <stdexcept>
 #include <iostream>
-
+#include "logmanager.h"
 // Base class for type-erased component arrays
 class IComponentArray
 {
@@ -58,7 +58,7 @@ class ComponentStorage
 public:
     ComponentStorage()
     {
-        std::cout << "ComponentStorage initialized." << std::endl;
+        LogManager::GetInstance().Log("[Info] ComponentStorage initialized.");
     }
 
     template <typename T, typename... Args>
@@ -104,10 +104,10 @@ private:
         //std::cout << "Accessing component array for type: " << typeId.name() << std::endl;
 
         // Check if m_componentArrays is valid
-        if (m_componentArrays.empty())
+       /* if (m_componentArrays.empty())
         {
-            std::cout << "Warning: m_componentArrays is empty!" << std::endl;
-        }
+            LogManager::GetInstance().Log("[Warning] m_componentArrays is empty!");
+        }*/
 
         // Check if the component array exists
         auto it = m_componentArrays.find(typeId);

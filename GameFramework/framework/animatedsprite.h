@@ -29,6 +29,9 @@ public:
 	void SetFrameDuration(float seconds);
 	int GetWidth() const;
 	int GetHeight() const;
+	int GetTotalFrames() const { return m_iTotalFrames; }
+	int GetCurrentFrame() const { return m_iCurrentFrame; }
+	void SetCurrentFrame(int frame);
 	void DebugDraw();
 
 protected:

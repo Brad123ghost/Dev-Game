@@ -279,6 +279,9 @@
     <ClCompile Include="animator.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sanimator.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -645,6 +648,12 @@
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="animator.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="canimator.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sanimator.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

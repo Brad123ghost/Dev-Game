@@ -22,8 +22,25 @@ void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, I
 			Vector2 dir = transform->dir;
 			if (input->m_bUp) dir.y = -1;
 			if (input->m_bDown) dir.y = 1;
-			if (input->m_bLeft) dir.x = -1;
-			if (input->m_bRight) dir.x = 1;
+			if (input->m_bLeft && !input->m_bRight)
+			{
+				dir.x = -1;
+				transform->facingLeft = true; // Set facing left if moving left
+			}
+			if (input->m_bRight && !input->m_bLeft)
+			{
+				dir.x = 1;
+				transform->facingLeft = false;
+			}
+
+			if (input->m_bUp && input->m_bDown)
+			{
+				dir.y = 0; // Prevent moving up and down at the same time
+			}
+			if (input->m_bLeft && input->m_bRight)
+			{
+				dir.x = 0; // Prevent moving left and right at the same time
+			}
 
 			if (dir.x != 0 && dir.y != 0)
 				dir.Normalize();

@@ -8,6 +8,7 @@
 #include "vertexarray.h"
 #include "texture.h"
 #include "imgui.h"
+#include "logmanager.h"
 
 // Library inlcudes:
 #include <cassert>
@@ -46,6 +47,18 @@ int AnimatedSprite::GetWidth() const
 int AnimatedSprite::GetHeight() const
 {
 	return static_cast<int>(ceilf(m_iFrameHeight * m_yScale));
+}
+
+void AnimatedSprite::SetCurrentFrame(int frame)
+{
+	if (frame < 0 || frame >= m_iTotalFrames)
+	{
+		std::string msg = "[AnimatedSprite]: Frame " + std::to_string(frame) + " is out of bounds.";
+		LogManager::GetInstance().Log(msg.c_str());
+		return;
+	}
+	m_iCurrentFrame = frame;
+	m_fTimeElapsed = 0.0f; // Reset time elapsed when changing frame
 }
 
 bool AnimatedSprite::IsAnimating() const

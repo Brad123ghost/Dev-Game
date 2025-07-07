@@ -21,14 +21,6 @@ struct AnimationTransition
 class Animator
 {
 public:
-	/*Animator();
-	~Animator();
-	void Initialize(float frameDuration);
-	void Update(float deltaTime);
-	void SetTotalFrames(int totalFrames);
-	void SetLooping(bool looping);
-	void Restart();
-	int GetCurrentFrame() const;*/
 	Animator();
 	~Animator();
 	void Process(float deltaTime);

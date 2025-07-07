@@ -9,6 +9,7 @@
 #include "ctransform.h"
 #include "cinput.h"
 #include "csprite.h"
+#include "canimator.h"
 #include "componentstorage.h"
 
 enum class eTag

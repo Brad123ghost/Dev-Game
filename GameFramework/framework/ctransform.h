@@ -15,6 +15,7 @@ public:
 	Vector2 dir;
 	Vector2 scale;
 	float rotation;
+	bool facingLeft;
 
 	CTransform(Vector2 pos = { 0,0 }, Vector2 vel = { 0,0 }, Vector2 scale = {1.f, 1.f}, float rot = 0.f)
 		: position(pos)
@@ -23,6 +24,7 @@ public:
 		, dir({0,0})
 		, scale(scale)
 		, rotation(rot)
+		, facingLeft(false)
 	{
 
 	};

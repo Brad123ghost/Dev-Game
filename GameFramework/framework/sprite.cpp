@@ -95,6 +95,12 @@ int Sprite::GetY() const
 	return m_y;
 }
 
+void Sprite::SetPos(int x, int y)
+{
+	m_x = x;
+	m_y = y;
+}
+
 void Sprite::SetWorldPos(Vector2 worldPos)
 {
 	/*m_vWorldPos.x = worldPos.x - m_centerX * m_scale;

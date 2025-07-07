@@ -67,6 +67,8 @@ public:
 	void SetY(int y);
 	int GetY() const;
 
+	void SetPos(int x, int y);
+
 	void SetWorldPos(Vector2 worldPos);
 	Vector2 GetWorldPos() const;
 

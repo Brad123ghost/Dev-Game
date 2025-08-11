@@ -705,7 +705,8 @@ bool Renderer::ReloadShaders()
 {
 	bool spriteShader = m_pSpriteShader->Load("shaders\\sprite.vert", "shaders\\sprite.frag");
 	bool outlineShader = m_pOutlineShader->Load("shaders\\outline.vert", "shaders\\outline.frag", "shaders\\outline.geom");
-	if (!spriteShader || !outlineShader)
+	bool gridShader = m_pGridShader->Load("Shaders\\line.vert", "shaders\\line.frag");
+	if (!spriteShader || !outlineShader || ! gridShader)
 	{
 		LogManager::GetInstance().Log("Failed to reload shaders!");
 		return false;

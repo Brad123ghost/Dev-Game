@@ -93,5 +93,19 @@ void SAnimator::SetActiveState(CAnimator* animator, CTransform* transform, const
 
 const std::string SAnimator::GetAnimationName(CAnimator* animator, CTransform* transform)
 {
-	return animator->m_sActiveState + (transform->facingLeft ? "Left" : "Right");
+	std::string state = "";
+
+	switch (transform->facing)
+	{
+	case eFacing::LEFT:
+		state = animator->m_sActiveState + "Left";
+		break;
+	case eFacing::RIGHT:
+		state = animator->m_sActiveState + "Right";
+		break;
+	case eFacing::NONE:
+	default:
+		state = animator->m_sActiveState; // No facing direction, return active state only
+	}
+	return state;
 }

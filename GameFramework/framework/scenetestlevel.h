@@ -26,9 +26,13 @@ public:
 	virtual void Process(float deltaTime, InputSystem& inputSystem);
 	virtual void Draw(Renderer& renderer);
 
+	void ShootBullet(Vector2 spawnPos, float dir);
+
 	virtual void SceneInfoDraw();
 	virtual void DebugDraw();
 	virtual void EntityManagerDebugDraw(bool& open);
+
+	
 
 private:
 	SceneTestLevel(const SceneTestLevel& sceneTestLevel);
@@ -39,6 +43,8 @@ protected:
 	Sprite* m_pTestSprite;
 	Camera* m_pCamera;
 	Renderer* m_pRenderer;
+	SoundSystem* m_pSoundSystem;
+
 private:
 	bool m_bShowGrid;
 	bool m_bDrawAABB;
@@ -48,8 +54,9 @@ private:
 
 	AnimatedSprite* m_pWalkLeft;
 	AnimatedSprite* m_pWalkRight;
+	AnimatedSprite* m_pCoinSpin;
 	Animator* m_pAnimator;
-	SAnimator* m_pSAnimator;
+	//SAnimator* m_pSAnimator;
 };
 
 #endif // __SCENETESTLEVEL_H_

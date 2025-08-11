@@ -6,6 +6,15 @@
 #include "basecomponent.h"
 #include "inlinehelper.h"
 
+enum class eFacing
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	NONE
+};
+
 class CTransform : public BaseComponent
 {
 public:
@@ -16,6 +25,7 @@ public:
 	Vector2 scale;
 	float rotation;
 	bool facingLeft;
+	eFacing facing;
 
 	CTransform(Vector2 pos = { 0,0 }, Vector2 vel = { 0,0 }, Vector2 scale = {1.f, 1.f}, float rot = 0.f)
 		: position(pos)
@@ -25,6 +35,7 @@ public:
 		, scale(scale)
 		, rotation(rot)
 		, facingLeft(false)
+		, facing(eFacing::NONE)
 	{
 
 	};

@@ -5,6 +5,10 @@
 #include "renderer.h"
 #include "sprocessinput.h"
 #include "texture.h"
+#include "animatedsprite.h"
+
+struct AnimationTransiion2;
+
 EntityManager::EntityManager()
 	: m_totalEntities(0)
 {
@@ -84,8 +88,11 @@ void EntityManager::DrawDebug()
 		bool isSelected = (selectedEntityId == e->GetId());
 		if (ImGui::Selectable("##row", isSelected, selectableFlags))
 		{
-			selectedEntityId = e->GetId();
-			std::cout << selectedEntityId << " selected" << std::endl;
+			if (isSelected)
+				selectedEntityId = static_cast<size_t>(-1);
+			else
+				selectedEntityId = e->GetId();
+			//std::cout << selectedEntityId << " selected" << std::endl;
 		}
 		ImGui::SameLine();
 		ImGui::TableSetColumnIndex(0);
@@ -169,7 +176,6 @@ void EntityManager::DrawDebug()
 	ImGui::Text("ID: %zu", selectedEntityId);
 	ImGui::Text("Tag: %s", m_entities[selectedEntityId]->GetTagString().c_str());
 	ImGui::SeparatorText("Properties");
-
 
 	ImGuiTreeNodeFlags propertyFlags = ImGuiTreeNodeFlags_DefaultOpen;
 	ImGuiInputTextFlags transformFlags = ImGuiInputTextFlags_CharsDecimal;
@@ -269,6 +275,78 @@ void EntityManager::DrawDebug()
 			}
 			ImGui::EndTable();
 			
+		}
+	}
+	if (m_entities[selectedEntityId]->GetComponent<CAnimator>())
+	{
+		auto animator = m_entities[selectedEntityId]->GetComponent<CAnimator>();
+		if (ImGui::CollapsingHeader("Animator", propertyFlags))
+		{
+			ImGui::SeparatorText("State");
+			ImGui::Text("Current: %s", animator->m_sActiveState.c_str());
+			ImGui::Text("Previous: %s", animator->m_sPrevActiveState.c_str());
+
+			ImGui::SeparatorText("Transitions");
+			ImGui::BeginTable("Animator Transitions", 2, flags);
+			ImGui::TableSetupColumn("fromState", columnFlags);
+			ImGui::TableSetupColumn("toState", columnFlags);
+			/*ImGui::TableSetupColumn("transitioning");*/
+			ImGui::TableHeadersRow();
+			for (const auto& from :animator->m_transitions)
+			{
+				std::vector<AnimationTransition2>::const_iterator it = from.second.begin();
+				while (it != from.second.end())
+				{
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn();
+					ImGui::Text("%s", from.first.c_str());
+					ImGui::TableNextColumn();
+					ImGui::Text("%s", it->toState.c_str());
+					/*ImGui::TableNextColumn();
+					ImGui::Text("%s", it->condition() ? "true" : "false");*/
+					++it;
+				}
+			}
+			ImGui::EndTable();
+
+			ImGui::SeparatorText("Animation States");
+			ImGui::BeginTable("Animator Debug", 2, flags);
+			ImGui::TableSetupColumn("Key", columnFlags);
+			ImGui::TableSetupColumn("Sprite Path", columnFlags);
+			ImGui::TableHeadersRow();
+
+			for (const auto& anim : animator->m_animations)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+				ImGui::Text("%s", anim.first.c_str());
+				ImGui::TableNextColumn();
+				ImGui::Text("%s", anim.second->GetTexturePath());
+				int width = anim.second->Sprite::GetWidth();
+				int height = anim.second->Sprite::GetHeight();
+				const float maxPrevWidth = 400.f;
+				const float maxPrevHeight = 400.f;
+				float scale = 1.0f;
+				if (width > 0 && height > 0)
+				{
+					float scaleX = maxPrevWidth / width;
+					float scaleY = maxPrevHeight / height;
+					scale = (scaleX < scaleY) ? scaleX : scaleY;
+					if (scale > 1.0f)
+						scale = 1.0f;
+				}
+				ImVec2 prevSize(width * scale, height * scale);
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::BeginTooltip();
+					ImGui::Image((ImTextureID)(intptr_t)anim.second->GetTextureId(), prevSize);
+					ImGui::Text("No. of frames: %d", anim.second->GetTotalFrames());
+					ImGui::Text("Frame size: %d by %d", anim.second->GetWidth(), anim.second->GetHeight());
+					ImGui::EndTooltip();
+
+				}
+			}
+			ImGui::EndTable();
 		}
 	}
 	if (m_entities[selectedEntityId]->GetComponent<CInput>())

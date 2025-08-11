@@ -18,6 +18,7 @@ public:
 	void CreateSound(const char* key, const char* pcSoundFileName);
 	void PlaySound(const char* key);
 	void Update();
+	void DebugDraw();
 
 protected:
 
@@ -29,6 +30,7 @@ protected:
 	FMOD_RESULT m_frResult;
 	FMOD::System* m_pSystem;
 	std::map<std::string, FMOD::Sound*> m_pLoadedSounds;
+	//std::map<std::string, std::string> m_pSoundLocations;
 
 private:
 

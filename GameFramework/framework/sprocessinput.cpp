@@ -25,12 +25,14 @@ void SProcessInput::ProcessPlayerInput(float dt, EntityManager& entityManager, I
 			if (input->m_bLeft && !input->m_bRight)
 			{
 				dir.x = -1;
-				transform->facingLeft = true; // Set facing left if moving left
+				//transform->facingLeft = true; // Set facing left if moving left
+				transform->facing = eFacing::LEFT; // Set facing direction
 			}
 			if (input->m_bRight && !input->m_bLeft)
 			{
 				dir.x = 1;
-				transform->facingLeft = false;
+				//transform->facingLeft = false;
+				transform->facing = eFacing::RIGHT; // Set facing direction
 			}
 
 			if (input->m_bUp && input->m_bDown)
@@ -70,7 +72,7 @@ void SProcessInput::DrawDebug(CInput& cInput)
 	if (ImGui::SliderInt("Sprint Speed", &sprintSpeed, 0, 100))
 		cInput.m_fSprintSpeed = sprintSpeed * 10;
 
-	/*ImGui::Indent();
+	ImGui::Indent();
 	if (ImGui::CollapsingHeader("Key States"))
 	{
 		ImGui::Text("Up: %s", cInput.m_bUp ? "Pressed" : "Released");
@@ -82,6 +84,6 @@ void SProcessInput::DrawDebug(CInput& cInput)
 		ImGui::Text("Left Click: %s", cInput.m_bLeftClick ? "Pressed" : "Released");
 		ImGui::Text("Right Click: %s", cInput.m_bRightClick ? "Pressed" : "Released");
 		ImGui::Unindent();
-	}*/
+	}
 
 }

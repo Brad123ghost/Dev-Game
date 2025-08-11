@@ -25,6 +25,7 @@
 #include "sprite.h"
 #include <iostream>
 #include "statemanager.h"
+#include "discordrp.h"
 
 // Static Members:
 Game* Game::sm_pInstance = 0;
@@ -82,6 +83,9 @@ Game::~Game()
 	delete m_pSoundSystem;
 	m_pSoundSystem = 0;
 
+	delete m_pDiscordRP;
+	m_pDiscordRP = 0;
+
 	StateManager::GetInstance().DestroyInstance();
 }
 
@@ -103,7 +107,12 @@ bool Game::Initialize()
 	m_pSoundSystem->CreateSystem();
 	m_pSoundSystem->Initialize();
 
-
+	m_pDiscordRP = new DiscordRP();
+	if (m_pDiscordRP->Initialize() != 0)
+	{
+		LogManager::GetInstance().Log("[Info] Discord Rich Presence failed to initialize!");
+		return false;
+	}
 	int bbWidth = 1440;
 	int bbHeight = 900;
 
@@ -238,6 +247,12 @@ void Game::EndIntro()
 bool Game::DoGameLoop()
 {
 	const float stepSize = 1.0f / 60.0f;
+
+	// Process Discord Callbacks
+	if (m_pDiscordRP && m_pDiscordRP->m_state.core)
+	{
+		m_pDiscordRP->m_state.core->RunCallbacks();
+	}
 
 	// TODO: process input here:
 	
@@ -560,8 +575,8 @@ void Game::DebugDraw()
 				if (ImGui::Button("Reload Shaders"))
 					m_pRenderer->ReloadShaders();
 				m_scenes[m_iCurrentScene]->DebugDraw();
-				ImGui::SeparatorText("Version");
-				ImGui::Checkbox("Show Version", &m_bShowMode);
+				ImGui::SeparatorText("Build");
+				ImGui::Checkbox("Show Build", &m_bShowMode);
 				ImGui::SeparatorText("FPS");
 				ImGui::Checkbox("Show FPS", &m_bShowFPS);
 				ImGui::SliderInt("Lag Slider", &laggerSize, 0, 100, "%d");
@@ -595,7 +610,37 @@ void Game::DebugDraw()
 				}
 				ImGui::EndTabItem();
 			}
+			if (ImGui::BeginTabItem("Discord RP"))
+			{
+				ImGui::Text("Current Details: %s", m_pDiscordRP->m_sdetails.c_str());
+				ImGui::Text("Current State: %s", m_pDiscordRP->m_sstate.c_str());
+				ImGui::Separator();
+
+				static char detailBuf[128] = "\0";
+	
+				static char stateBuf[128] = "\0";
+
+				ImGui::Text("Detail");
+				ImGui::SameLine();
+				ImGui::InputText("##detail", detailBuf, 128);
+				ImGui::Text("State");
+				ImGui::SameLine();
+				ImGui::InputText("##state", stateBuf, 128);
+				if (ImGui::Button("Update##discord"))
+				{
+					m_pDiscordRP->UpdateActivity(detailBuf, stateBuf);
+					LogManager::GetInstance().Log("[Discord RP] Successfully updated activity.");
+				}
+
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Sound System##test"))
+			{
+				m_pSoundSystem->DebugDraw();
+				ImGui::EndTabItem();
+			}
 			ImGui::EndTabBar();
+
 		}
 		
 

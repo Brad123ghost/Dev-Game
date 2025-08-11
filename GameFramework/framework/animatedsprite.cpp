@@ -25,7 +25,8 @@ AnimatedSprite::AnimatedSprite()
 	, m_FrameDuration(1.0f)
 	, totalTime(0.0f)
 {
-
+	m_x = 0;
+	m_y = 0;
 }
 
 AnimatedSprite::~AnimatedSprite()

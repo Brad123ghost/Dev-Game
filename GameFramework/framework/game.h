@@ -13,6 +13,7 @@ class Scene;
 class InputSystem;
 class SoundSystem;
 class Sprite;
+class DiscordRP;
 
 class Game
 {
@@ -50,6 +51,7 @@ protected:
 	Renderer* m_pRenderer;
 	InputSystem* m_pInputSystem;
 	SoundSystem* m_pSoundSystem;
+	DiscordRP* m_pDiscordRP;
 
 	std::vector<Scene*> m_scenes;
 	int m_iCurrentScene;

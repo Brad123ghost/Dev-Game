@@ -282,6 +282,9 @@
     <ClCompile Include="sanimator.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="discordrp.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -654,6 +657,12 @@
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sanimator.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="discordrp.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csound.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

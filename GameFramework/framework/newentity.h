@@ -10,6 +10,7 @@
 #include "cinput.h"
 #include "csprite.h"
 #include "canimator.h"
+#include "ccollider.h"
 #include "componentstorage.h"
 
 enum class eTag
@@ -33,6 +34,7 @@ public:
 
 	void SetDead();
 	bool IsAlive() const;
+	std::string GetName() const;
 	eTag GetTag() const;
 	std::string GetTagString() const;
 	size_t GetId() const;

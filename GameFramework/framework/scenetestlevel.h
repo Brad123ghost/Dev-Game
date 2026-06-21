@@ -27,11 +27,13 @@ public:
 	virtual void Draw(Renderer& renderer);
 
 	void ShootBullet(Vector2 spawnPos, float dir);
+	//int GetCoins() const { return coins; };
+	void AddCoins(int amount);
 
 	virtual void SceneInfoDraw();
 	virtual void DebugDraw();
 	virtual void EntityManagerDebugDraw(bool& open);
-
+	virtual void EntitySpawnerDebugDraw(bool& open);
 	
 
 private:
@@ -50,12 +52,14 @@ private:
 	bool m_bDrawAABB;
 	int gridSize;
 	int cellSize;
+	int coins;
 	EntityManager m_entityManager;
 
 	AnimatedSprite* m_pWalkLeft;
 	AnimatedSprite* m_pWalkRight;
 	AnimatedSprite* m_pCoinSpin;
 	Animator* m_pAnimator;
+	//int coins =0;
 	//SAnimator* m_pSAnimator;
 };
 

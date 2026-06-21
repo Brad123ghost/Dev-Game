@@ -62,7 +62,7 @@ public:
 
 	void DrawLine(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &color = glm::vec3(1.f));
 	void DrawLine2D(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec3 &color = glm::vec3(1.f));
-	void DrawLineFlush(Camera* pCamera);
+	void DrawLineFlush(Camera* pCamera = nullptr);
 	void GenerateGrid(int gSize, int cSize);
 
 	SDL_Window* GetWindow() const { return m_pWindow; }

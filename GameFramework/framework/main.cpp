@@ -10,6 +10,14 @@
 #include "logmanager.h"
 #include <iostream>
 #include "glew.h"
+
+struct Circle
+{
+	float x;
+	float y;
+	float radius;
+};
+
 int main(int argc, char* argv[])
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

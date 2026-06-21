@@ -11,6 +11,8 @@ DiscordRP::~DiscordRP()
 
 int DiscordRP::Initialize()
 {
+    //1416172187542622218
+	//1371430735864664094
     auto result = discord::Core::Create(1371430735864664094, DiscordCreateFlags_Default, &m_pcore);
     m_state.core.reset(m_pcore);
     if (!m_state.core) {

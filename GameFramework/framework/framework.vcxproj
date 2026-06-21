@@ -215,6 +215,7 @@
     <ClCompile Include="scenepausescreen.cpp" />
     <ClCompile Include="scenespaceinvaders.cpp" />
     <ClCompile Include="scenetestlevel.cpp" />
+    <ClCompile Include="scollider.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="soundsystem.cpp" />
     <ClCompile Include="sprocessinput.cpp" />
@@ -289,7 +290,9 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="canimator.h" />
+    <ClInclude Include="ccollider.h" />
     <ClInclude Include="cinput.h" />
+    <ClInclude Include="cinventory.h" />
     <ClInclude Include="componentstorage.h" />
     <ClInclude Include="crate.h" />
     <ClInclude Include="csound.h" />
@@ -323,6 +326,7 @@
     <ClInclude Include="sanimator.h" />
     <ClInclude Include="scenepausescreen.h" />
     <ClInclude Include="scenetestlevel.h" />
+    <ClInclude Include="sprocesscollider.h" />
     <ClInclude Include="sprocessinput.h" />
     <ClInclude Include="statemanager.h" />
     <ClInclude Include="iniparser.h" />
@@ -365,6 +369,10 @@
     <None Include="debughelper.h" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="..\..\Game\audio\level-up-1.wav" />
+    <Media Include="..\..\Game\audio\level-up-2.wav" />
+    <Media Include="..\..\Game\audio\pickup-1.wav" />
+    <Media Include="..\..\Game\audio\pickup-2.wav" />
     <Media Include="..\..\Game\audio\SpaceInvaders\alien-hit.wav" />
     <Media Include="..\..\Game\audio\SpaceInvaders\explosion.wav" />
     <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav" />

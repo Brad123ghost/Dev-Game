@@ -285,6 +285,9 @@
     <ClCompile Include="discordrp.cpp">
       <Filter>Framework\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scollider.cpp">
+      <Filter>Framework\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h">
@@ -665,6 +668,15 @@
     <ClInclude Include="csound.h">
       <Filter>Framework\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ccollider.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sprocesscollider.h">
+      <Filter>Framework\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cinventory.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="debughelper.h">
@@ -701,6 +713,18 @@
     </Media>
     <Media Include="..\..\Game\audio\SpaceInvaders\laser-shoot.wav">
       <Filter>Resource Files\Audio\Space Invaders</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\level-up-1.wav">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\level-up-2.wav">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\pickup-1.wav">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\..\Game\audio\pickup-2.wav">
+      <Filter>Resource Files\Audio</Filter>
     </Media>
   </ItemGroup>
   <ItemGroup>

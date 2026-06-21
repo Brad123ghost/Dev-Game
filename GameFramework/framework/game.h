@@ -88,10 +88,12 @@ private:
 	bool m_bShowDebugHelp;
 	bool m_bShowAssetBrowser;
 	bool m_bShowEntityManager;
+	bool m_bShowEntitySpawner;
 	bool m_bShowFPS;
 	bool m_bShowMode;
 	std::string m_sMode;
 	bool m_bShowGrid;
+	bool m_bShowBounding;
 
 	/*float x;
 	float y;*/

@@ -159,7 +159,7 @@ void SceneSpaceInvaders::Process(float deltaTime, InputSystem& inputSystem)
 		ResetGame();
 	}
 
-	m_pSoundSystem->Update();
+	//m_pSoundSystem->Update();
 	/*m_pBackground->Process(deltaTime);*/
 	ButtonState spaceState = (inputSystem.GetKeyState(SDL_SCANCODE_SPACE));
 	m_invaderMoveTimer += deltaTime;

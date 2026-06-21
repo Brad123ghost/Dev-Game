@@ -27,6 +27,18 @@ void EntityManager::Update()
 
 	// Remove Dead entities
 	RemoveDeadEntities(m_entities);
+	// Reset the selectedEntityId if the selected entity has been deleted
+	bool found = false;
+	for (auto& e : m_entities)
+	{
+		if (e->GetId() == m_selectedEntityId)
+		{
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+		m_selectedEntity = nullptr;
 
 	// Remove dead entities from the map
 	for (auto& pair : m_entityMap)
@@ -66,7 +78,7 @@ void EntityManager::RemoveDeadEntities(EntityVec& vec)
 
 void EntityManager::DrawDebug()
 {
-	ImGui::Text("Entity Manager Debug");
+	auto loadedTextureKeys = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextureKeys();
 
 	ImGuiTableFlags flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp;
 	//ImGuiTableRowFlags rowFlags = ImGuiTableRowFlags_Headers;
@@ -78,27 +90,26 @@ void EntityManager::DrawDebug()
 	ImGui::TableSetupColumn("Name", columnFlags );
 	ImGui::TableSetupColumn("Tag", columnFlags );
 	ImGui::TableHeadersRow();
-	static size_t selectedEntityId = static_cast<size_t>(-1);
 	for (auto& e : m_entities)
 	{
 		ImGui::PushID(e->GetId());
 		
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
-		bool isSelected = (selectedEntityId == e->GetId());
+		bool isSelected = (m_selectedEntityId == e->GetId());
 		if (ImGui::Selectable("##row", isSelected, selectableFlags))
 		{
 			if (isSelected)
-				selectedEntityId = static_cast<size_t>(-1);
+				m_selectedEntityId = static_cast<size_t>(-1);
 			else
-				selectedEntityId = e->GetId();
-			//std::cout << selectedEntityId << " selected" << std::endl;
+				m_selectedEntityId = e->GetId();
+			//std::cout << m_selectedEntityId << " selected" << std::endl;
 		}
 		ImGui::SameLine();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("%zu", e->GetId());
 		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("Name");
+		ImGui::Text("%s", e->GetName().c_str());
 		ImGui::TableSetColumnIndex(2);
 		ImGui::Text("%s", e->GetTagString().c_str());
 
@@ -107,79 +118,47 @@ void EntityManager::DrawDebug()
 	ImGui::EndTable();
 
 	ImGui::BeginChild("EntityDetails", ImVec2(0, 450), true);
-	if (selectedEntityId == static_cast<size_t>(-1) || selectedEntityId > m_entities.size())
+	auto it = std::find_if(
+		m_entities.begin(), m_entities.end(), [this](const std::shared_ptr<NewEntity>& entity) {
+			return entity->GetId() == m_selectedEntityId;
+		}
+	);
+	
+	if (it == m_entities.end())
 	{
 		ImGui::Text("Select an entity to view its properties.");
 		ImGui::EndChild();
 		return;
 	}
+
+	m_selectedEntity = *it;
+
 	/*if (ImGui::Button("Texture Browser"))
 	{
 		Game::GetInstance().GetRenderer().GetTextureManager()->ToggleSelectTexture();
 	}*/
-	auto loadedTextureKeys = Game::GetInstance().GetRenderer().GetTextureManager()->GetLoadedTextureKeys();
-
+	
+	// Todo rename this better for the selected entity texture change
 	static int selectedTextureIndex = 0;
 	const char* combo_preview_value = loadedTextureKeys[selectedTextureIndex].c_str();
-	ImGui::Text("Texture List");
-	if(ImGui::BeginCombo("##Texture List", combo_preview_value))
-	{
-		for (int n = 0; n < loadedTextureKeys.size(); n++)
-		{
-			const bool is_selected = (selectedTextureIndex == n);
-			if (ImGui::Selectable(loadedTextureKeys[n].c_str(), is_selected))
-			{
-				selectedTextureIndex = n;
-			}
-			if (ImGui::IsItemHovered())
-			{
-				Texture* tex = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture(loadedTextureKeys[n].c_str());
-				if (tex)
-				{
-					int texWidth = tex->GetWidth();
-					int texHeight = tex->GetHeight();
-					const float maxPrevWidth = 200.f;
-					const float maxPrevHeight = 200.f;
+	DrawComboPreview(loadedTextureKeys, combo_preview_value, &selectedTextureIndex);
+	
 
-					float scale = 1.0f;
-					if (texWidth > 0 && texHeight > 0)
-					{
-						float scaleX = maxPrevWidth / texWidth;
-						float scaleY = maxPrevHeight / texHeight;
-						scale = (scaleX < scaleY) ? scaleX : scaleY;
-						if (scale > 1.0f) 
-							scale = 1.0f;
-					}
-					ImVec2 prevSize(texWidth * scale, texHeight * scale);
-
-					ImGui::BeginTooltip();
-					ImGui::Text("Texture ID: %d", tex->GetTextureId());
-					ImGui::Text("Size: %d x %d", tex->GetWidth(), tex->GetHeight());
-					ImGui::Image((ImTextureID)(intptr_t)tex->GetTextureId(), prevSize);
-					ImGui::EndTooltip();
-				}
-				else
-				{
-					ImGui::Text("Texture not found.");
-				}
-			}
-		}
-		ImGui::EndCombo();
-	}
 	Texture* newTexture = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture(combo_preview_value);
 	if (ImGui::Button("Change Texture"))
 	{
-		m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite()->ReplaceTexture(*newTexture);
+		// Get sprite returns a std::shared_ptr, trying to replace a *sprite
+		m_selectedEntity->GetComponent<CSprite>()->GetSprite()->ReplaceTexture(*newTexture);
 	}
 
-	ImGui::Text("Name");
-	ImGui::Text("ID: %zu", selectedEntityId);
-	ImGui::Text("Tag: %s", m_entities[selectedEntityId]->GetTagString().c_str());
-	ImGui::SeparatorText("Properties");
+	ImGui::Text("%s", m_selectedEntity->GetName().c_str());
+	ImGui::Text("ID: %zu", m_selectedEntity->GetId());
+	ImGui::Text("Tag: %s", m_selectedEntity->GetTagString().c_str());
 
+	ImGui::SeparatorText("Properties");
 	ImGuiTreeNodeFlags propertyFlags = ImGuiTreeNodeFlags_DefaultOpen;
 	ImGuiInputTextFlags transformFlags = ImGuiInputTextFlags_CharsDecimal;
-	if (m_entities[selectedEntityId]->GetComponent<CTransform>())
+	if (m_selectedEntity->GetComponent<CTransform>())
 	{
 		if (ImGui::CollapsingHeader("Transform", propertyFlags))
 		{
@@ -190,7 +169,7 @@ void EntityManager::DrawDebug()
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			Vector2& pos = m_entities[selectedEntityId]->GetComponent<CTransform>()->position;
+			Vector2& pos = m_selectedEntity->GetComponent<CTransform>()->position;
 			ImGui::DragFloat("##xpos", &pos.x, 1.f, 0, 0, "%f");
 			ImGui::TableNextColumn();
 			ImGui::Text("Y");
@@ -202,7 +181,7 @@ void EntityManager::DrawDebug()
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			Vector2& scale = m_entities[selectedEntityId]->GetComponent<CTransform>()->scale;
+			Vector2& scale = m_selectedEntity->GetComponent<CTransform>()->scale;
 			ImGui::DragFloat("##xscale", &scale.x, 0.01f, 0.1f, 10.0f, "%.2f");
 			ImGui::TableNextColumn();
 			ImGui::Text("Y");
@@ -217,7 +196,7 @@ void EntityManager::DrawDebug()
 			ImGui::TableNextColumn();
 			ImGui::Text("X");
 			ImGui::SameLine();
-			float& rot = m_entities[selectedEntityId]->GetComponent<CTransform>()->rotation;
+			float& rot = m_selectedEntity->GetComponent<CTransform>()->rotation;
 			ImGui::DragFloat("##rotation", &rot, 0.1f, 0.0f, 360.0f, "%.2f", ImGuiSliderFlags_WrapAround);
 			ImGui::TableNextColumn();
 			if (ImGui::Button("Reset##Rot"))
@@ -226,9 +205,36 @@ void EntityManager::DrawDebug()
 			ImGui::EndTable();
 		}
 	}
-	if (m_entities[selectedEntityId]->GetComponent<CSprite>())
+	if (m_selectedEntity->GetComponent<CCollider>())
 	{
-		auto sprite = m_entities[selectedEntityId]->GetComponent<CSprite>()->GetSprite();
+		auto collider = m_selectedEntity->GetComponent<CCollider>();
+		if (ImGui::CollapsingHeader("Collider", propertyFlags))
+		{
+			ImGui::Text("Active: %s", collider->isActive ? "True" : "False");
+			ImGui::SameLine();
+			if(ImGui::Button("Reset##Active"))
+				collider->isActive = true;
+			
+			ImGui::Text("Triggered: %s", collider->isTriggered ? "True" : "False");
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##Triggered"))
+				collider->isTriggered = false;
+
+			ImGui::Text("Dropped: %s", collider->isDropped ? "True" : "False");
+			ImGui::SameLine();
+			if (ImGui::Button("Reset##Dropped"))
+				collider->isDropped = true;
+			Vector2& colliderSize = collider->size;
+			ImGui::DragFloat("##colliderXSize", &colliderSize.x, 1.f, 1.f, 128.f, "%f");
+			ImGui::DragFloat("##colliderYSize", &colliderSize.y, 1.f, 1.f, 128.f, "%f");
+			//ImGui::Text("X: %f", collider->size.x);
+			//ImGui::Text("Y: %f", collider->size.y);
+
+		}
+	}
+	if (m_selectedEntity->GetComponent<CSprite>())
+	{
+		auto sprite = m_selectedEntity->GetComponent<CSprite>()->GetSprite();
 		if (ImGui::CollapsingHeader("Sprite", propertyFlags))
 		{
 			ImGui::BeginTable("SpriteProperties", 6);		
@@ -277,9 +283,9 @@ void EntityManager::DrawDebug()
 			
 		}
 	}
-	if (m_entities[selectedEntityId]->GetComponent<CAnimator>())
+	if (m_selectedEntity->GetComponent<CAnimator>())
 	{
-		auto animator = m_entities[selectedEntityId]->GetComponent<CAnimator>();
+		auto animator = m_selectedEntity->GetComponent<CAnimator>();
 		if (ImGui::CollapsingHeader("Animator", propertyFlags))
 		{
 			ImGui::SeparatorText("State");
@@ -349,12 +355,61 @@ void EntityManager::DrawDebug()
 			ImGui::EndTable();
 		}
 	}
-	if (m_entities[selectedEntityId]->GetComponent<CInput>())
+	if (m_selectedEntity->GetComponent<CInput>())
 	{
 		if (ImGui::CollapsingHeader("Input", propertyFlags))
 		{
-			SProcessInput::DrawDebug(*m_entities[selectedEntityId]->GetComponent<CInput>());
+			SProcessInput::DrawDebug(*m_selectedEntity->GetComponent<CInput>());
 		}
 	}
 	ImGui::EndChild();
+}
+
+void EntityManager::DrawComboPreview(std::vector<std::string> _loadedTextureKeys, const char* _combo_preview_value, static int* _selectedTextureIndex)
+{
+	ImGui::Text("Texture List");
+	if (ImGui::BeginCombo("##Texture List", _combo_preview_value))
+	{
+		for (int n = 0; n < _loadedTextureKeys.size(); n++)
+		{
+			const bool is_selected = (*_selectedTextureIndex == n);
+			if (ImGui::Selectable(_loadedTextureKeys[n].c_str(), is_selected))
+			{
+				*_selectedTextureIndex = n;
+			}
+			if (ImGui::IsItemHovered())
+			{
+				Texture* tex = Game::GetInstance().GetRenderer().GetTextureManager()->GetTexture(_loadedTextureKeys[n].c_str());
+				if (tex)
+				{
+					int texWidth = tex->GetWidth();
+					int texHeight = tex->GetHeight();
+					const float maxPrevWidth = 200.f;
+					const float maxPrevHeight = 200.f;
+
+					float scale = 1.0f;
+					if (texWidth > 0 && texHeight > 0)
+					{
+						float scaleX = maxPrevWidth / texWidth;
+						float scaleY = maxPrevHeight / texHeight;
+						scale = (scaleX < scaleY) ? scaleX : scaleY;
+						if (scale > 1.0f)
+							scale = 1.0f;
+					}
+					ImVec2 prevSize(texWidth * scale, texHeight * scale);
+
+					ImGui::BeginTooltip();
+					ImGui::Text("Texture ID: %d", tex->GetTextureId());
+					ImGui::Text("Size: %d x %d", tex->GetWidth(), tex->GetHeight());
+					ImGui::Image((ImTextureID)(intptr_t)tex->GetTextureId(), prevSize);
+					ImGui::EndTooltip();
+				}
+				else
+				{
+					ImGui::Text("Texture not found.");
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
 }

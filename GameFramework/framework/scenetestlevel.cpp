@@ -7,11 +7,14 @@
 #include "camera.h"
 #include "debughelper.h"
 #include "texture.h"
+#include "texturemanager.h"
 #include "logmanager.h"
 #include "sprocessinput.h"
+#include "sprocesscollider.h"
 #include "animator.h"
 #include "game.h"
 #include "sanimator.h"
+#include "soundsystem.h"
 
 SceneTestLevel::SceneTestLevel()
 	: m_bShowGrid(false)
@@ -22,6 +25,7 @@ SceneTestLevel::SceneTestLevel()
 	, cellSize(32)
 	, m_pRenderer(0)
 	, m_pAnimator(0)
+	, coins(0)
 {
 }
 
@@ -50,10 +54,14 @@ SceneTestLevel::~SceneTestLevel()
 	m_pSAnimator = 0;*/
 
 }
-
+void coinPickupPlay()
+{
+	std::cout << "Sound play" << std::endl;
+}
 bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 {
 	InputSystem& inputSystem = Game::GetInstance().GetInputSystem();
+	m_pSoundSystem = &soundSystem;
 
 	m_pAnimator = new Animator();
 	AnimatedSprite* pIdleLeft = renderer.CreateAnimatedSprite("sprites\\idle_left.png");
@@ -107,6 +115,7 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	player0->AddComponent<CTransform>(Vector2(600,600));
 	player0->GetComponent<CTransform>()->facing = eFacing::LEFT;
 	player0->AddComponent<CInput>();
+	player0->AddComponent<CCollider>(Vector2(22, 36));
 	player0->AddComponent<CAnimator>();
 	player0->GetComponent<CAnimator>()->m_animations.insert({"IdleLeft", pIdleLeft});
 	player0->GetComponent<CAnimator>()->m_animations.insert({"IdleRight", pIdleRight });
@@ -119,6 +128,7 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	InputMode mode = player0->GetComponent<CInput>()->m_eInputMode;
 	CInput* playerInput = player0->GetComponent<CInput>();
 	// Animation Condition based on player input values set in cinput
+	// Todo Fix so when opposite key is pressed the animation goes back to default
 	// Idle to Run
 	AnimationTransition2 idleRunTransition{ "Run",  [playerInput]() {
 			return (playerInput->m_bShift && (playerInput->m_bUp || playerInput->m_bDown || playerInput->m_bLeft || playerInput->m_bRight));
@@ -164,7 +174,6 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	m_pTestSprite->SetY(300);
 	m_pTestSprite->SetScale(0.5f);
 
-
 	// Add player
 	std::shared_ptr<NewEntity> player = m_entityManager.CreateEntity("Dummy 0", eTag::DEFAULT);
 	std::shared_ptr<Sprite> sprite = std::make_shared<Sprite>();
@@ -187,6 +196,14 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	std::shared_ptr<NewEntity> coin = m_entityManager.CreateEntity("Coin", eTag::ITEM);
 	coin->AddComponent<CTransform>(Vector2(500, 500));
 	coin->AddComponent<CAnimator>();
+	coin->AddComponent<CCollider>(Vector2(16, 16),true ,true);
+
+
+	SoundSystem* sound = m_pSoundSystem;
+	coin->GetComponent<CCollider>()->onEnterCondition = [sound, this](void) {
+		sound->PlaySound("pickup-1");
+		AddCoins(1);
+		};
 	m_pCoinSpin = renderer.CreateAnimatedSprite("sprites\\spin_gold_coin_strip.png");
 	//std::shared_ptr<AnimatedSprite> pCoinSpin(renderer.CreateAnimatedSprite("sprites\\spin_gold_coin_strip.png"));
 	m_pCoinSpin->SetupFrames(16, 16);
@@ -196,6 +213,11 @@ bool SceneTestLevel::Initialize(Renderer& renderer, SoundSystem& soundSystem)
 	m_pCoinSpin->Animate();
 	coin->GetComponent<CAnimator>()->m_animations.insert({ "Spin", m_pCoinSpin });
 	coin->GetComponent<CAnimator>()->m_sActiveState = "Spin";
+
+	m_pSoundSystem->CreateSound("pickup-1", "audio\\pickup-1.wav");
+	m_pSoundSystem->CreateSound("pickup-2", "audio\\pickup-2.wav");
+	m_pSoundSystem->CreateSound("level-up-1", "audio\\level-up-1.wav");
+	m_pSoundSystem->CreateSound("level-up-2", "audio\\level-up-2.wav");
 
 	return true;
 }
@@ -238,7 +260,7 @@ void SceneTestLevel::Process(float deltaTime, InputSystem& inputSystem)
 	// If entity has input and is player
 	auto& t = m_entityManager.GetEntities(eTag::PLAYER);
 	SProcessInput::ProcessPlayerInput(deltaTime, m_entityManager, inputSystem, *m_pCamera);
-
+	SProcessCollider::ProcessCollider(deltaTime, m_entityManager);
 	// Process animator
 	SAnimator::ProcessAnimator(deltaTime, &m_entityManager);
 	
@@ -260,6 +282,9 @@ void SceneTestLevel::Draw(Renderer& renderer)
 
 	/*std::string title = "Test Level - " + std::to_string(counter);
 	renderer.DrawText(title.c_str(), 10, 10, 1.0f);*/
+
+	std::string coinText = "Coins: " + std::to_string(coins);
+	renderer.DrawText(coinText.c_str(), 10, 50, 1.0f, {0,0,0,1});
 	//renderer.DrawLine2D({ 0,0 }, { 0,1 });
 	/*renderer.DrawLine2D({ 400,700 }, { 400,750 });
 	renderer.DrawLine2D({ 400,700 }, { 450,700 });
@@ -289,8 +314,37 @@ void SceneTestLevel::Draw(Renderer& renderer)
 
 	if(m_bDrawAABB)
 	{
-		renderer.DrawAABB(0, 0, 2, 2);
+		/*renderer.DrawAABB(0, 0, 2, 2);
+		std::cout << "AABB Enabled" << std::endl;*/
+		for (auto& e : m_entityManager.GetEntities())
+		{
+			CCollider* collider = e->GetComponent<CCollider>();
+			CTransform* transform = e->GetComponent<CTransform>();
+			if (collider && collider->isActive && transform)
+			{
+				// Calculate half size
+				Vector2 halfSize = { collider->size.x / 2.0f, collider->size.y / 2.0f };
+				Vector2 center = transform->position;
+
+				// Calculate corners
+				Vector2 topLeft = { center.x - halfSize.x, center.y - halfSize.y };
+				Vector2 topRight = { center.x + halfSize.x, center.y - halfSize.y };
+				Vector2 bottomRight = { center.x + halfSize.x, center.y + halfSize.y };
+				Vector2 bottomLeft = { center.x - halfSize.x, center.y + halfSize.y };
+
+				// Draw bounding box (assuming you have a color, e.g., Color::Red)
+				renderer.DrawLine2D({ topLeft.x, topLeft.y }, { topRight.x, topRight.y });
+				renderer.DrawLine2D({ topLeft.x, topLeft.y }, { bottomLeft.x, bottomLeft.y });
+				renderer.DrawLine2D({ topRight.x, topRight.y }, { bottomRight.x, bottomRight.y });
+				renderer.DrawLine2D({ bottomLeft.x, bottomLeft.y }, { bottomRight.x, bottomRight.y });
+
+			}
+		}
+
+		renderer.DrawLineFlush();
 	}
+
+
 }
 
 void SceneTestLevel::ShootBullet(Vector2 spawnPos, float dir)
@@ -299,9 +353,15 @@ void SceneTestLevel::ShootBullet(Vector2 spawnPos, float dir)
 	
 }
 
+void SceneTestLevel::AddCoins(int amount)
+{
+	coins += amount;
+}
+
 void SceneTestLevel::SceneInfoDraw()
 {
 	ImGui::Text("Scene: Test Level");
+	ImGui::Checkbox("Draw AABB", &m_bDrawAABB);
 	DebugHelper::DrawCameraDebug(m_pCamera, &m_entityManager);
 	m_pAnimator->DrawDebug();
 }
@@ -320,6 +380,42 @@ void SceneTestLevel::EntityManagerDebugDraw(bool& open)
 	if (ImGui::Begin("Entity Manager", &open))
 	{
 		m_entityManager.DrawDebug();
+	}
+	ImGui::End();
+	ImGui::PopStyleColor();
+}
+
+void SceneTestLevel::EntitySpawnerDebugDraw(bool& open)
+{
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.f, 0.f, 0.f, 0.85f));
+	if (ImGui::Begin("Entity Spanwer", &open))
+	{
+		auto loadedTextureKeys = m_pRenderer->GetTextureManager()->GetLoadedTextureKeys();
+		ImGui::Text("Entity Manager Debug");
+		static int spawnSelectedTextureIndex = 0;
+		const char* spawn_combo_preview_value = loadedTextureKeys[spawnSelectedTextureIndex].c_str();
+		m_entityManager.DrawComboPreview(loadedTextureKeys, spawn_combo_preview_value, &spawnSelectedTextureIndex);
+		if (ImGui::Button("Spawn Coin"))
+		{
+			std::shared_ptr<NewEntity> coin = m_entityManager.CreateEntity("Coin", eTag::ITEM);
+			coin->AddComponent<CTransform>(Vector2(500, 500));
+			coin->AddComponent<CAnimator>();
+			coin->AddComponent<CCollider>(Vector2(16, 16), true, true);
+			SoundSystem* sound = m_pSoundSystem;
+			coin->GetComponent<CCollider>()->onEnterCondition = [sound, this](void) {
+				sound->PlaySound("pickup-1");
+				AddCoins(1);
+				};
+			AnimatedSprite* m_pCoinSpin = m_pRenderer->CreateAnimatedSprite("sprites\\spin_gold_coin_strip.png");
+
+			m_pCoinSpin->SetupFrames(16, 16);
+			m_pCoinSpin->SetPos(500, 500);
+			m_pCoinSpin->SetFrameDuration(0.1f);
+			m_pCoinSpin->SetLooping(true);
+			m_pCoinSpin->Animate();
+			coin->GetComponent<CAnimator>()->m_animations.insert({ "Spin", m_pCoinSpin });
+			coin->GetComponent<CAnimator>()->m_sActiveState = "Spin";
+		}
 	}
 	ImGui::End();
 	ImGui::PopStyleColor();

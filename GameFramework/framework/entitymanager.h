@@ -26,11 +26,15 @@ public:
 	EntityVec& GetEntities(const eTag tag);
 
 	void DrawDebug();
+	//void DrawSpawnerDebug();
+	void DrawComboPreview(std::vector<std::string> _loadedTextureKeys, const char* _combo_preview_value, static int* _selectedTextureIndex);
 
 private:
 	void RemoveDeadEntities(EntityVec& vec);
 
 private:
+	size_t m_selectedEntityId = static_cast<size_t>(-1);
+	std::shared_ptr<NewEntity> m_selectedEntity = nullptr;
 	EntityVec m_entities;
 	EntityMap m_entityMap;
 	EntityVec m_entitiesToAdd;

@@ -24,6 +24,11 @@ bool NewEntity::IsAlive() const
 	return m_bAlive;
 }
 
+std::string NewEntity::GetName() const
+{
+	return m_strName;
+}
+
 eTag NewEntity::GetTag() const
 {
 	return m_eTag;

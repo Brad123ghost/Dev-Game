@@ -51,10 +51,12 @@ Game::Game()
 	, m_pZapPow{0}
 	, m_bShowSplash(true)
 	, m_bShowDebugHelp(false)
-	, m_bShowAssetBrowser(true)
+	, m_bShowAssetBrowser(false)
 	, m_bShowEntityManager(true)
+	, m_bShowEntitySpawner(true)
 	, m_bShowFPS(false)
 	, m_bShowMode(false)
+	, m_bShowBounding(false)
 	//, x(500)
 	//, y(10)
 {
@@ -257,7 +259,7 @@ bool Game::DoGameLoop()
 	// TODO: process input here:
 	
 	m_pInputSystem->ProcessInput();
-	
+	m_pSoundSystem->Update();
 	// Might need to be moved to intro scene or something
 	// 
 	// Only run the intro scene for the first 4 seconds and showSplash is true
@@ -418,6 +420,9 @@ void Game::Draw(Renderer& renderer)
 		renderer.DrawLineFlush();*/
 		//renderer.DrawGrid();
 	}
+	if(m_bShowBounding)
+		renderer.DrawAABB(0, 0, 100, 100);
+
 	renderer.Present();
 	
 }
@@ -483,7 +488,11 @@ void Game::DebugDraw()
 			SceneTestLevel* testLevel = static_cast<SceneTestLevel*>(m_scenes[m_iCurrentScene]);
 			testLevel->EntityManagerDebugDraw(m_bShowEntityManager);
 		}
-
+		if (m_bShowEntitySpawner && StateManager::GetInstance().GetState() == GameState::STATE_TEST_LEVEL)
+		{
+			SceneTestLevel* testLevel = static_cast<SceneTestLevel*>(m_scenes[m_iCurrentScene]);
+			testLevel->EntitySpawnerDebugDraw(m_bShowEntitySpawner);
+		}
 		if (m_bShowAssetBrowser)
 		{
 			ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
@@ -494,6 +503,8 @@ void Game::DebugDraw()
 			
 			ImGui::End();
 		}
+
+		
 
 		if (m_bShowDebugHelp)
 		{
@@ -571,6 +582,9 @@ void Game::DebugDraw()
 			//}
 			if (ImGui::BeginTabItem("Debug##test"))
 			{
+				ImGui::SeparatorText("Collision");
+				ImGui::Checkbox("Show bounding boxes", &m_bShowBounding);
+			
 				ImGui::SeparatorText("Shaders");
 				if (ImGui::Button("Reload Shaders"))
 					m_pRenderer->ReloadShaders();
